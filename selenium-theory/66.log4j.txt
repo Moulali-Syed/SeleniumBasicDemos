@@ -1,0 +1,259 @@
+what is apache log4j?
+log4j is relaible fast and flexible logging framework written in java which is distributed under the apache software license
+
+why log4j?
+
+send entire logs of file?
+log only when there is error for package A
+log the entire messages for package B
+i want logs with timestamp
+i want log file of last week
+how will i know if there is an error by just looking at logs?
+
+importing log4j to eclipse project
+ search apache log4j download and download https://logging.apache.org/log4j/2.x/download.html  -- apache-log4j-2.17.2-bin.zip  from here
+
+Now create a java project , go to build path and import [log4j-api-version , log4j-core-version]
+
+package alpha;
+//step2 import stmt
+import org.apache.logging.log4j.*;
+
+public class Demo {
+
+	//step1
+	private static Logger log = LogManager.getLogger(Demo.class.getName());
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		log.debug("Iam debugging");
+		//we have error debug info  fatal
+		if(2<0)
+			log.info("Info");
+		log.error("object not present");
+		log.fatal("this is fatal");
+	}
+
+}
+
+Use log. Error() to log when elements are not displayed in the page or if any validations fail
+
+Use Log. Debug()
+
+When each Selenium action is performed like click, SendKeys, getText()
+
+Use log.info()
+
+When operation is successfully completed ex: After loading page, or after any successful validations
+
+It’s just counterpart to log. Error()
+
+
+************************************************************************************************************************************************************************************
+
+
+Importance of log4j xml file
+go to https://logging.apache.org/log4j/2.x/manual/configuration.html
+
+
+copy below code from above link
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+
+Appenders and loggers are important tags in above code
+
+where to log?
+is at Appenders , from above it prints in console
+
+how to log ?
+In appenders we are giving PatternLayout
+
+What to log?
+when we need all logs give level="trace" but in above we given level="error" , it prints only error logs
+
+************************************************************************************************************************************************************************************
+
+understanding xml file to control logging in testcases
+
+create a new folder at project level name it resources inside it
+
+create a file - log4j2.xml 
+and write
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="trace">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+
+Now we have to add this to build path  --  go to java build path -> in source tab - click add folder and add the resources folder
+
+Suppose client has a requiremnet to show logs from only one specific package , lets think i have alpha and beta packages , now i want to
+differntiate specific package logs
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+<!-- Logger name="packageName.ClassName this will targets specific file in a package in which we can specify the level -->
+<!--  to aviod runnings same testcase multiple times we provide additivity - false-->
+		<Logger name="alpha.Demo" level="error" additivity="false">
+			<AppenderRef ref="Out" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
+************************************************************************************************************************************************************************************
+<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+     <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <SizeBasedTriggeringPolicy size="500" />
+          </RollingFile>
+
+to give logs path create a new package with name logs at project level and a file prints.log and give its path
+************************************************************************************************************************************************************************************
+a sample log4j2 file
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<!-- name-basePath gives the project path -->
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+		<!-- to log in file we use RollingFile inside appender -->
+		<!-- filename - here represents the path the file should get created -->
+		<!-- filepattern - when file size greater than 500kb it will create new file based on this pattern , as we specified in SizeBasedTriggeringPolicy size="500" -->
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<!-- Logger name="packageName.ClassName this will targets specific file in a package in which we can specify the level -->
+		<!--  to aviod runnings same testcase multiple times we provide additivity - false-->
+		<Logger name="alpha.Demo" level="error" additivity="false">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
+************************************************************************************************************************************************************************************
+
+Selenium testcase with log4j logging sample example
+package Tests;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+
+import alpha.Demo;
+
+public class act {
+private static Logger log =LogManager.getLogger(act.class.getName());
+public static void main(String[] args) {
+// TODO Auto-generated method stub
+   log.debug("Setting chrome driver property");
+System.setProperty("webdriver.chrome.driver","C:\\work\\chromedriver.exe");
+WebDriver driver =new ChromeDriver();
+driver.manage().window().maximize();
+   log.info("Window Maximized");
+   log.debug("Now hitting Amazon server");
+driver.get("https://www.amazon.com/");
+   log.info("Landed on amazon home page");
+Actions a =new Actions(driver);
+
+
+/* a.moveToElement(driver.findElement(By.xpath("//*[@id='twotabsearchtextbox']"))) .click().keyDown(Keys.SHIFT).sendKeys("capitalletters").doubleClick().build().perform();
+a.moveToElement(driver.findElement(By.cssSelector("a[id='nav-link-accountList']"))).build().perform();
+a.moveToElement(driver.findElement(By.cssSelector("a[id='nav-link-accountList']"))).contextClick().build().perform();*/
+
+
+driver.get("http://jqueryui.com/demos/droppable/");
+   log.debug("Getting the frames count");
+System.out.println(driver.findElements(By.tagName("iframe")).size());
+log.info("Frames count retreived");
+try
+{
+driver.switchTo().frame(0);
+log.info("Successfully switched to frame");
+}
+catch(Exception e)
+{
+log.error("Cannot identify the frame"); 
+}
+//driver.switchTo().frame(driver.findElement(By.cssSelector("iframe.demo-frame")));
+   log.debug("Identifying Draggable objects");
+       WebElement draggable = driver.findElement(By.id("draggable"));
+       WebElement droppable = driver.findElement(By.id("droppable"));
+       new Actions(driver).dragAndDrop(draggable, droppable).build().perform();
+log.info("Drag and drop success");
+       
+
+
+
+
+}
+
+}
+
+
+
+Sample LOg4j xml file
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+       <Properties>
+<Property name="basePath">./logs</Property>
+</Properties>
+ 
+  <Appenders>
+      <RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+     <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <SizeBasedTriggeringPolicy size="500" />
+          </RollingFile>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="trace">
+      <AppenderRef ref="File"/>
+    </Root>
+  </Loggers>
+</Configuration>

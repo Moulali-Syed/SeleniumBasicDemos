@@ -1,0 +1,9 @@
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+System.setProperty("webdriver.gecko.driver","C:\\Testing\\Drivers\\geckodriver-v0.31.0-win64\\geckodriver.exe");
+		WebDriver driver = new FirefoxDriver();
+
+
+import org.openqa.selenium.edge.EdgeDriver;
+System.setProperty("webdriver.edge.driver", "C:\\Testing\\Drivers\\edgedriver_win64\\msedgedriver.exe");
+		WebDriver driver = new EdgeDriver();

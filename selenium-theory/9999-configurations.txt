@@ -1,0 +1,19 @@
+if u r unable to get testng assertion import then u have to do below configurations
+
+help-->go to eclipse market place--.search testng and install testng for eclipse
+
+Then restart eclipse
+now goto build path -- libraries -- add library --testNg
+Apply and close
+
+
+for screenshot add dependency of apache commons io
+<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+
+To use selenium 4 locators add this below static import
+import static org.openqa.selenium.support.locators.RelativeLocator.*;

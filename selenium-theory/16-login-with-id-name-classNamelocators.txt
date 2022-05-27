@@ -1,0 +1,29 @@
+package seleniumbasics;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Locators {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+
+		// open webpage
+		driver.get("https://rahulshettyacademy.com/locatorspractice/");
+
+		// find element[id locator]
+		driver.findElement(By.id("inputUsername")).sendKeys("rahul");
+
+		//by name
+		driver.findElement(By.name("inputPassword")).sendKeys("ajsbffb");
+		
+		//by class name
+		driver.findElement(By.className("signInBtn")).click();
+
+	}
+
+}

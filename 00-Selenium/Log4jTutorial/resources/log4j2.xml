@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<!-- name-basePath gives the project path -->
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+		<!-- to log in file we use RollingFile inside appender -->
+		<!-- filename - here represents the path the file should get created -->
+		<!-- filepattern - when file size greater than 500kb it will create new file based on this pattern , as we specified in SizeBasedTriggeringPolicy size="500" -->
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<!-- Logger name="packageName.ClassName this will targets specific file in a package in which we can specify the level -->
+		<!--  to aviod runnings same testcase multiple times we provide additivity - false-->
+		<Logger name="alpha.Demo" level="error" additivity="false">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>

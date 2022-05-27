@@ -1,0 +1,16 @@
+Selenium Features:
+Why Selenium?
+Selenium is open source Automation testing tool
+it is exclusively for web based applications
+selenium supports multiple browsers Chrome,Firefox,IE,Safari
+Selenium works with multiple platforms
+Selenium can be coded in multiple langauges - java,C#,python,JS,php,Ruby
+
+Difference between Selenium and WebDriver?
+Selenium is a suite of tools to automate web browsers across many platforms
+Selenium WebDriver and Selenium IDE 
+Selenium IDE- record and playback tool
+Selenium WebDriver - used for creating robust,browser-based regression automation suites and tests
+
+Selenium Webdriver is successor of Selenium Remote control which has been officially deprecated
+

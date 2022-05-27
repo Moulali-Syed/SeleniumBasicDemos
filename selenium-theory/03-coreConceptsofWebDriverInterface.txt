@@ -1,0 +1,29 @@
+in maven search testng and select dependency and paste in pom.xml file
+
+Create a java class inside src folder
+
+Invoke browser:
+
+We have an interface called WebDriver
+Interface is a group of related methods with empty bodies .Its class responsibitlity to implement methods declared in interface
+When class agreed to implement the interface they must need to provide implementation / bodies to all defined methods in interface
+in simple terms interface enforces the contract to class to follow
+
+WebDriver is an interface which provides set of browser automation methods with empty bodies(Abstract Methods)
+Classes like ChromeDriver,FirefoxDriver,MicrosoftDriver,SafariDriver etc implement webdriver interface
+and provide their own implementation to webdriver methods
+
+We need to create object of class to access methods present in the class
+ChromeDriver driver = new ChromeDriver();
+driver object here has access to all methods of chromedriver
+
+WebDriver driver  =  new ChromeDriver();
+driver object here has access to methods of chrome driver which are defined in webdriver interface
+ChromeDriver has access to WebDriver methods and also has access to personal driver methods
+
+
+import org.openqa.selenium.WebDriver;
+WebDriver
+
+import org.openqa.selenium.chrome.ChromeDriver;
+ChromeDriver

@@ -1,0 +1,14 @@
+Absoulte xpath : start from html and traverse we start with /
+/html/header
+Relative xpath: when ever we go // it will understand it is relative xpath
+//header/div
+
+sibling - sibling
+//header/div/button[1]/following-sibling::button[1]
+
+child to parent traversal
+//header/div/button[1]/parent::div/parent::header/a
+
+
+in css this is not possible child to parent , sibling to sibling
+

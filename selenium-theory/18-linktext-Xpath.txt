@@ -1,0 +1,15 @@
+		
+		//LinkText - for the a [anchor tag] elements
+		driver.findElement(By.linkText("Forgot your password?")).click();
+		
+		//XPath
+/*
+ * 		//tagName[@attribute='value']
+ * 		//input[@placeholder='Username']
+ *     
+ *     $x(pathHere)
+ * 
+ */
+		driver.findElement(By.xpath("//input[@placeholder='Name']")).sendKeys("John");
+
+	}

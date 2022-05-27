@@ -1,0 +1,31 @@
+package uicomponents;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class StaticDropDown {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://rahulshettyacademy.com/dropdownsPractise/");
+		WebElement staticDropDown = driver.findElement(By.id("ctl00_mainContent_DropDownListCurrency"));
+		Select dd = new Select(staticDropDown);
+		dd.selectByIndex(3);//by index
+		
+		System.out.println(dd.getFirstSelectedOption().getText());//this gives first selected option
+		
+		dd.selectByVisibleText("AED"); //visible text
+		System.out.println(dd.getFirstSelectedOption().getText());
+		
+		dd.selectByValue("AED"); //value
+		System.out.println(dd.getFirstSelectedOption().getText());
+		
+		
+	}
+
+}

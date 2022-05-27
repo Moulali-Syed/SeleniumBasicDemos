@@ -1,0 +1,45 @@
+download jdk:
+https://www.oracle.com/java/technologies/downloads/
+
+
+Edit environmental variables:
+set JAVA_HOME D:\Program Files\Java\jdk-11.0.12
+
+Download eclipse
+
+Open Eclipse
+
+Select File --> New --> JavaProject -->Click on Next --> Finish
+
+we will get popup create module-info.java , select dont create
+
+Maven is central repository for java based libraries
+mvnrepository.com
+
+Now open maven repository website search Selenium
+Select Selenium Java and select the latest one we see on screen
+
+we have  files of jar type either we have to download them or we can see 4 lines of code below as dependency then maven will download all jars
+it has groupid - organisation project , artifactid - subproject in org project , version
+
+By Default java project doesnot have maven knowledge 
+so right click on project - configure - Convert to Maven Project
+
+it will ask for 
+GroupId : like organisation name
+ArtifactId : Selenium-java
+Version:give any version or leave as it is
+package : jar 
+Click on Finish
+
+This will create a new file called pom.xml which is heart of maven project
+
+After version tag in pom.xml write <dependencies></dependencies> , now paste the selenium dependency from maven repo in between the dependencies tag
+Now save project we see Maven Dependencies folder containing selenium jars
+
+if this is not happening on save select Project --> Build Automatically
+
+ctrl+Shift+F - eclipse shortcut for code prettier
+Window-Show View-ProjectExplorer - [to get the left window panel in eclipse back if closed]
+
+If it still doesnt show , Then go to windows --> reset perspective ! and it will show up , but it reset all your settings .

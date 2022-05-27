@@ -1,0 +1,20 @@
+Once runs are triggered , refresh your project and check target folder and copy the path of index.html file and open in chrome
+
+now we can also see testng-result.xml file which if we include in jenkins it will generate report
+
+go to manage jenkins , manage plugins and search and install TestNG Results plugin and restart jenkins
+
+Then go to job - click on configure
+go to post build actions  ---> select Publish TestNG Results
+
+Then go to SourceCodeManagement --> select build periodically and give time as below 0 7 * * * , it will run automatically if server is up and running at specified time
+
+
+we have to give Minutes Hour Day Month DayWeek
+
+M H D M DayWeek
+0 7 * * *
+if server is up it will run automatically
+0minutes 7 hoursInMng everyday everymonth everyweekDay
+
+once runs happening daily we will also get the testNG results trend graph

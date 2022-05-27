@@ -1,0 +1,114 @@
+Selenium ChromeDev Tools:
+
+ChormeDev Tools are built in to google chrome browser , we get so much access from them , performance metrics , Network tab
+with dev tools we have deeper access to applications which render on browser
+
+What is Chrome Dev Tools Protocol[CDP]?
+CDP provides tools to instrument , inspect , debug and profile chromium , chrome and other blink-based browsers
+Selenium 4 introduces powerful commands which are wrapper around the CDP Domains to grant access to chrome dev tools directly from your automated tests
+With CDP support selenium opens up possibilities of out of box testing with complete access and control to browser features within the Test
+
+Examples: capture ,monitor and stub network req and responses
+		inject session cookies and perform basic auth
+		mock device coordinates for mobile/tabs view
+		check and monitor the sites performance
+		mock geolocations of user
+		block the network requests
+		mock faster/slower networks speeds
+		execute and debug javascript
+		view console logs
+
+
+Impelementation:
+Create a java project , convert to maven project 
+
+chromium driver class has predefined methods to access dev tools
+ChromeDriver and EdgeDriver are inherited from chromium driver . so we can access to chrome and edge browsers
+
+Step1:Intiate chromium driver
+Step2:
+create object for chrome dev tools with getDevTools() method
+DevTools devTools = driver.getDevTools()
+returns the new devtools object which allows you to send the builtin selenium commands for CDP
+
+Step3:
+initiate dev tools session to send commands from selenium
+devTools.createSession()
+
+Step4:
+devTools.send(COMMAND)
+what is this command?
+these selenium built in commands are wrapper methods that invoke CDP domain functions
+****************************************************************************************
+Demo:
+
+package demo;
+
+import java.util.Optional;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v101.emulation.Emulation;
+
+public class CDPDemo {
+
+	public static void main(String[] args) throws InterruptedException {
+		System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		ChromeDriver driver = new ChromeDriver();
+
+		DevTools devTools = driver.getDevTools();
+
+		devTools.createSession();
+
+		// send commands to CDP methods --> CDP methods will invoke and get access to
+		// chrome dev tools
+		//select Emulation.setDeviceMetricsOverride based on chrome version
+		devTools.send(Emulation.setDeviceMetricsOverride(600, 1000, 50, true, Optional.empty(), Optional.empty(),
+				Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
+				Optional.empty(), Optional.empty()));
+		
+		driver.get("https://rahulshettyacademy.com/angularAppdemo/");
+		driver.findElement(By.cssSelector(".navbar-toggler")).click();
+		
+		Thread.sleep(3000);
+		
+		driver.findElement(By.linkText("Library")).click();
+	}
+
+}
+**************************************************************************************************************
+importance of executeCDP command to construct the own CDP functions
+
+we can create custom CDP commands using executeCDP
+
+package demo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+
+public class CDPCommandsTest {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		ChromeDriver driver = new ChromeDriver();
+
+		DevTools devTools = driver.getDevTools();
+		
+		devTools.createSession();
+		
+		Map deviceMetrics = new HashMap();
+		deviceMetrics.put("width", 600);
+		deviceMetrics.put("height",1);
+		deviceMetrics.put("deviceScaleFactor", 50);
+		deviceMetrics.put("mobile", true);
+		
+		driver.executeCdpCommand("Emulation.setDeviceMetricsOverride", deviceMetrics);
+	}
+
+}
+

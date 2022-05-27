@@ -1,0 +1,11 @@
+
+Selenium WebDriver architecture simplified:
+
+write code in selenium java
+After you trigger the test , complete selenium code (Client) which we have written will be converted to JSON Format
+Generated JSON is sent to browser Driver(Server) through http protocol.
+Note:Each browser contains a seperate browser driver
+Browser Driver communicates with its respective browser and executes the commands by interpreting json which it received on the browser
+Browser Driver receives responses back from browser and it sends json response back to client
+
+client(our code) --->transferred over http protocol in form of JSON ---> reaches browser Driver ---> this will communicate with the browser

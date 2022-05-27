@@ -1,0 +1,47 @@
+package seleniumbasics;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Locators {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		// open webpage
+		driver.get("https://rahulshettyacademy.com/locatorspractice/");
+
+		// find element[id locator]
+		driver.findElement(By.id("inputUsername")).sendKeys("rahul");
+
+		// by name
+		driver.findElement(By.name("inputPassword")).sendKeys("ajsbffb");
+
+		// by class name
+		driver.findElement(By.className("signInBtn")).click();
+
+		// css selector
+		/*
+		 * Input-tagName color-attribute Green -  associated value
+		 * 
+		 * css selector classname --> tagName.className id ---------> tagName#id
+		 * 
+		 * generic css selector tagName[attribute='value']
+		 */
+
+		//$('p.error') - to check css in chrome dev tools
+
+//		selectorhub , chropath plugins can help to choose the selector is unique or not
+
+		System.out.println(driver.findElement(By.cssSelector("p.error")).getText());// fails at this step if some wait
+																					// is not provided before this step
+
+	}
+
+}

@@ -1,0 +1,10 @@
+We have to download chromedriver.exe to execute code in chrome
+
+Search Chromedriver download - check ur system chrome version and download chromedriver 
+
+
+System.setProperty("webdriver.chrome.driver","C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		//Invoking Browser
+		//ChromeBrowser
+		WebDriver driver = new ChromeDriver();
+		//we need chromedriver.exe

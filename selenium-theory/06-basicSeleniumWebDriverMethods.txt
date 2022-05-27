@@ -1,0 +1,15 @@
+		//open link
+		driver.get("https://rahulshettyacademy.com");
+		
+		//to get title
+		driver.getTitle();
+
+//get current url
+		System.out.println(driver.getCurrentUrl());
+		
+		//close browser[close only current window]
+		driver.close();
+		
+		//quit[closes all browser instances]
+		driver.quit();
+		

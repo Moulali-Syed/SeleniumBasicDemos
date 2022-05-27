@@ -1,0 +1,94 @@
+Selenium Grid:
+Is a smart proxy server that makes it easy to run tests in parallel on multiple machines
+
+If we run 10 testcases on our machine parallely then it will open 10 browsers and system will be overloaded
+
+An high level architecture of Selenium Grid is 
+
+		your code
+		     |
+		Selenium Hub
+		|     |      |
+	   chrome  Firefox opera
+
+code we write will reach to selenium hub and browsers
+If our script wants to run in chrome or mac or firefox then selenium hub will divert it according to the browser
+
+Selenium Grid Architecture[selenium code]:
+
+
+client[the code we write in our eclipse] and when we execute it , the request will go to Router[this will ask distributor to create a node and assign to physical machine]
+--> distributor will decide what is the right physical machine to run the requested code according to browsers, load balance , OS -->then finally send request to node that is
+assign a physical machine , ---> simultaneously distributor will can send information to session map that it assigned a physical machine thus session map has Session Id and Node URI
+that is physical machine ip ---> for suppose from same machine we are getting code then router will check in the session map whether the session id nodeURI exist ,if exist then it will
+directly pass the code to Node , only first time it will take help of distributor for assigning session , there after router will take care internally
+
+
+
+
+Fetting started with Selenium Grid:
+Several components compose a selenium grid .depending on your needs , u can start each one of them on its own , or few at the same time by using a grid role
+
+
+we can start in distributed mode : Each component needs to be started on its own .This setup is more suitable for large grids.
+						if we want to do set up , then we have to do setup for sessions sessionqueue , distributor , router ,i.e have to start seperately
+			
+			Hub and Node mode:        these roles are suitable for small and middle sized grids . in this we start hub all other components will start automatically
+						hub is union of following components , Router ,distributor , session map, new session queue , event bus
+						new session queue - when we start multiple sessions from selenium distributor can solve only one session at a time , all the remaining
+									  sessions waiting for distributor to check they will go in the queue
+						Event Bus - is virtual all are communicating with it
+
+
+Step1: go to https://www.selenium.dev/downloads/ and download the selenium-server-version.jar 
+Step2: Place the selenium server and drivers[chrome/firefox] in same folder
+Step3: In command prompt go to the above folder path in which selenium server and drivers are present
+Step4: Start the Hub using below command
+	 java -jar <SeleniumJarName> hub
+	 looks as -------->   java -jar selenium-server-4.1.2.jar hub
+Step5: Press Enter , this is the setup we have to do in our system
+		
+To check status of our hub , go to localhost:4444 , this gives status of hub 
+Now we have to create nodes and register to hub
+Hub and Node can be same machine also , ideally real time they will be different
+
+[node in same machine]
+Step6: open new  cmd and Start Node in same machine where hub is running use below command
+	 java -jar <SeleniumJarName> node --detect-drivers true
+
+Step7: go to the hub url localhost:4444 , there we can see its ability of running testcases in different browsers and specify max concurrency and we can see node at localhost:5555
+
+[node in different machine]
+Step6: go to https://www.selenium.dev/downloads/ and download the selenium-server-version.jar 
+Step7: Place the selenium server and drivers[chrome/firefox] in same folder 
+Step8: now goto cmd and write , as we also have to register our hub , at the time we run hub we will get XPUB , XSUB these are transfer protocols we need to pass them as below
+	 java -jar selenium-server-4.1.2.jar node --detect-drivers true --publish-events tcp://192.168.1.139:4442 --subscribe-events tcp://192.168.1.139:4443
+
+now our node gets registered with the hub
+
+transmission control protocol - tcp
+pub - publish 
+sub - subscribing
+
+Demo for executing using node and hub:
+______________________________________
+
+Create a java project
+When ever using hub the WebDriver ,step should be modified as below inside @Test
+
+DesiredCapabilities caps = new DesiredCapabilities();
+caps.setBrowserName("chrome");
+//caps.setPlatform();
+//caps.setCapability(CapabilityType.ACCERT_SSL_CERTS, true);
+//caps.setCapability(CapapbilityType.BROWSER_NAME,"chrome");
+WebDriver driver = new RemoteWebDriver(new URL("http://192.168.1.139:4444"),caps);
+						  // where is hub                     , capabilities  are sent to WebDriver
+
+driver.get("https://google.com");
+driver.findElement(By.name("q").sendKeys("Apple");
+driver.close();
+
+create another class with same code and some other url , and a different browser
+
+Now convert project to testNG and give parallel="classes" inside <test> tag
+

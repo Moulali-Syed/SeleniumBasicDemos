@@ -1,0 +1,4 @@
+//button[text()='Log Out']
+
+
+//*[text()='Log Out']

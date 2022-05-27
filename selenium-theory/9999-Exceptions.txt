@@ -1,0 +1,38 @@
+we should give double backslash in path
+
+	System.setProperty("webdriver.chrome.driver","C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+
+path should look as above , if browser path is wrong we will get exception called
+IllegalStateException:The browser executable must exist
+
+
+
+Exception in thread "main" org.openqa.selenium.NoSuchElementException: no such element: 
+Unable to locate element: {"method":"css selector","selector":"p.error"}
+
+this error may come when we given wrong path or when the webpage is taking more time and our script is expecting the error before its visible
+We have to synchronize our code
+For now use implicit wait
+
+
+
+elementclickinterceptedexception selenium java
+What is ElementClickInterceptedException Selenium Java?
+ElementClickInterceptedException occurs when the target element that you want to click is overlaid by some other element in the web page
+
+Exception in thread "main" org.openqa.selenium.ElementNotInteractableException: element not interactable
+we should go and check how many elements are visible in the webpage with same xpath and provide proper index
+
+
+Exception in thread "main" org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
+suppose we have to click links in footer section and we iterate on each link then we click on first link it will open a new page,
+thus second link will not be found , thus result in stale element exception . to overcome either we have to click back button or use ctrl+click
+
+
+java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.WebDriver.manage()" because "this.driver" is null, in base class we define driver and at last we give implicit wait
+as the driver , whenever we extracting value from property we must use equals instead of ==
+
+FilenotFOundException : if path of the data.properties or any file is wrong it will not invoke and throw error
+
+
+ArrayoutOfBoundException

@@ -1,0 +1,6 @@
+we should give double backslash in path
+
+	System.setProperty("webdriver.chrome.driver","C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+
+path should look as above , if browser path is wrong we will get exception called
+IllegalStateException:The browser executable must exist

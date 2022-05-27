@@ -1,0 +1,82 @@
+Importance of jenkins
+all testcases should run at 2:00 am , all testcases should run at early mng , it should run automatically, everything should be internally configured
+helps to maintain consistency of all jars in the whole project
+***********************  ***********************  ***********************
+install and configure jenkins
+go to https://www.jenkins.io/download/
+ and download .war file
+
+now open cmd and go to the .war file location
+and write
+java -jar jenkins.war -httpPort=8080
+
+and press enter we will get as below
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+47d3ed1820c84612a14091e59b9806bf
+
+This may also be found at: C:\Users\MOULALI\.jenkins\secrets\initialAdminPassword
+
+
+Now open localhost:8080 and give the above admin password and click on custom download
+
+creating admin user
+username: Moulali
+password: Apple123@
+fullname: Moulali Syed
+email: syedmoulali1997@gmail.com
+
+jenkins url: http://localhost:8080/
+
+we need maven and java , all jars will be coming from pom.xml file
+
+Now open localhost:8080
+click on manageJenkins --> global tool configuration
+we will see jdk installations
+copy the JAVA_HOME path and paste it , add as below
+
+JDK
+Name
+jdk-11.0.12
+JAVA_HOME
+D:\Program Files\Java\jdk-11.0.12
+
+Similarly for MAVEN 
+copy MAVEN_HOME path and paste it as below
+
+Name
+apache-maven-3.8.5
+MAVEN_HOME
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+
+Now click on Save
+*********************** ***********************  ***********************
+
+configuring jenkins settings and workspace
+
+now we want to push our java project to jenkins
+lets create a new job
+
+NewItem - give name as MavenJob - select FreeStyle Project - click OK
+
+In general tab click on advanced - check mark the use custom workspace
+
+Now go to your project copy it , then go to the .jenkins folder path and paste it
+C:\Users\MOULALI\.jenkins - paste project in this path
+now jenkins will check it is present in jenkins home directory
+
+${JENKINS_HOME}/MavenDemo
+JENKINS_HOME gives the jenkins home directory path , MavenDemo is our project name at which pom.xml file is present at project level
+
+Now go to build tag
+and select Invoke top-level maven targets
+Maven Version : it will be present in dropdown
+goals : test -PRegression
+
+and save job
+
+to run our job click on build now
+
+we can see the console output

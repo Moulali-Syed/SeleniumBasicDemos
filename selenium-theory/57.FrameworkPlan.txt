@@ -1,0 +1,7 @@
+testNG - unit testing framework
+Datadriven testing - best practice to drive data from external resources
+Maven - Build management tool
+jenkins - continous integration
+Reports - reports for framework tests
+Log4j - logging framework generation logs
+PageObjectMechanism - design patterns for tests development

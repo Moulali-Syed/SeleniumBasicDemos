@@ -1,0 +1,361 @@
+                                                          Maven –
+Apache Maven is a software project management and build management tool for Java Frameworks.
+1.	Why Maven?
+•	Central repository to get dependencies
+•	Maintaining common structure across the organization
+•	Flexibility in Integrating with CI tools
+•	Plugins for Test framework execution.
+2.	Install Maven
+3.	Set System variables to recognize Maven
+4.	Understanding Maven terminologies
+ Artifact: An artifact is a file, usually a JAR, that gets deployed to a Maven repository.
+ GroupId: groupId will identify your project uniquely across all projects,
+ archetype:generate ; Generates a new project from an archetype
+5.	Creating Maven Project
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+6.	Integrate Maven with Eclipse
+7.	Maven Phases for Test Automation
+8.	Clean, compile, test
+9.	Understanding POM.xml file dependencies..
+10.	How to find the dependencies of the Softwares?
+11.	Importance of Maven Sure fire plugin
+12.	Running Tests with Surefireplugin
+13.	Integrating Testng into Maven
+14.	Testng xml files configuration in POM file
+15.	Setting up Profiles in POM.xml file
+16.	Running selected Tests only with Maven commands
+17.	Maven Sure fire reports
+
+https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+
+*********************** Install Maven and configure ***********************************
+go to  https://maven.apache.org/download.cgi
+and download apache-maven-3.8.5-bin.zip and extract and copy path upto before bin
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+
+in environmental variables 
+create new 
+MAVEN_HOME
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+
+copy bin folder path and place in path variable add and paste path C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5\bin
+
+
+in cmd
+check mvn --version , if shown as below then maven is installed successfully
+
+C:\Users\MOULALI>mvn --version
+Apache Maven 3.8.5 (3599d3414f046de2324203b78ddcf9b5e4388aa0)
+Maven home: C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+Java version: 11.0.12, vendor: Oracle Corporation, runtime: D:\Program Files\Java\jdk-11.0.12
+Default locale: en_IN, platform encoding: Cp1252
+OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+
+***********************************  ***********************************  ***********************************
+
+group id : identify project uniquely
+artifact id : sub project from the main project , is like a jar name
+
+creating maven project with eclipse
+new - project - maven - maven project - select maven-archetype-quickstart  template - provide group id - projectName , artifact id - sub project
+
+project name - artifact id
+package name - we can give by default it will be groupid.artifactid
+
+pom.xml file is heart of maven project
+
+src/main/java - we write all utilities 
+src/test/java - we write testcases
+this way we have seperation between testcases and utilities
+
+***********************************  ***********************************  ***********************************
+Create a maven project and inside src/test/java , create 3 files as SeleniumTest.java,AppiumTest.java,RestApiTest.java
+
+Add testNg library , add selenium java dependency , testng dependency , rest assured , appium dependency from mvn repo
+
+use surefireplugin to run testcases
+
+The Surefire Plugin is used during the test phase of the build lifecycle to execute the unit tests of an application. It generates reports in two different file formats:
+
+Plain text files (*.txt)
+XML files (*.xml)
+
+go to https://maven.apache.org/surefire/maven-surefire-plugin/
+
+and click on usage
+
+paste the below
+
+<build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M6</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+in pom.xml above dependencies tag
+***********************************  ***********************************  ***********************************
+
+Importance of surfire plugin in running testcases
+
+copy the project path and open in cmd , pom.xml should be at project level
+
+C:\Testing\SeleniumJava\00-Selenium\MavenDemo
+
+mvn clean - command cleans
+
+to know complie errors
+mvn compile
+
+mvn test - this will clean and compile 
+when ever we run the testcases it goes to .m2 folder and checks for all dependencies/jars
+
+now we can run all our testcases from command prompt
+
+maven algorithm expects the testcases that they must end with Test , then only they will execute
+
+***********************************  ***********************************  *****************************************
+
+Integrating testNG with maven
+
+run testng xml file from maven
+
+right click on project --> convert to testNG
+
+in pom.xml make we have testng dependency
+
+from https://maven.apache.org/surefire/maven-surefire-plugin/  go to using testng
+now  in using suite xml files
+
+we have surefire plugin with configuration copy it and paste inside the surefire plugin
+
+<configuration>
+          <suiteXmlFiles>
+            <suiteXmlFile>testng.xml</suiteXmlFile>
+          </suiteXmlFiles>
+        </configuration>
+
+now in cmd when we run mvn test , it will run based on the testng.xml file , if we remove some class from testng.xml it will not run that
+
+
+running a single test
+mvn -Dtest=TestCircle test
+
+example :
+mvn -Dtest=AppiumTest test
+
+***********************************  ***********************************  *****************************************
+
+Switching the tests with maven profiling
+
+we can have multiple testng.xml files and we can have all testcases in one xml file and other xml file has only few testcases for smoke testing
+to run based on requirement we can build profiles
+
+<profiles>
+<profile>
+
+<id>Smoke</id>
+<build></build>
+</profile>
+
+</profiles>
+
+in surefire plugin configuration place different testng.xml files
+
+
+now we can run based on profile from cmd
+
+mvn test -PSmoke
+***********************************  ***********************************  *****************************************
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>MavenDemo</groupId>
+	<artifactId>MavenDemo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>MavenDemo</name>
+	<!-- FIXME change it to the project's website -->
+	<url>http://www.example.com</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
+<profiles>
+<profile>
+	<id>Smoke</id>
+<build>
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M6</version>
+					<configuration>
+						<suiteXmlFiles>
+							<suiteXmlFile>testng.xml</suiteXmlFile>
+						</suiteXmlFiles>
+					</configuration>
+				</plugin>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+					<configuration>
+						<suiteXmlFiles>
+							<suiteXmlFile>testng.xml</suiteXmlFile>
+						</suiteXmlFiles>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</profile>
+<profile>
+<id>Regression</id>
+<build>
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M6</version>
+					<configuration>
+						<suiteXmlFiles>
+							<suiteXmlFile>testng2.xml</suiteXmlFile>
+						</suiteXmlFiles>
+					</configuration>
+				</plugin>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+					<configuration>
+						<suiteXmlFiles>
+							<suiteXmlFile>testng2.xml</suiteXmlFile>
+						</suiteXmlFiles>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</profile>
+</profiles>
+
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>4.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>7.5.1</version>
+		</dependency>
+
+	</dependencies>
+
+
+</project>
+
+

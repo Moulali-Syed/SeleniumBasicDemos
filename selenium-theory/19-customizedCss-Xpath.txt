@@ -1,0 +1,24 @@
+// LinkText - for the a [anchor tag] elements
+		driver.findElement(By.linkText("Forgot your password?")).click();
+
+		// XPath
+		/*
+		 * //tagName[@attribute='value'] //input[@placeholder='Username']
+		 * 
+		 * $x('pathHere')
+		 * 
+		 */
+		driver.findElement(By.xpath("//input[@placeholder='Name']")).sendKeys("John");
+
+		driver.findElement(By.xpath("//input[@type='text'][2]")).clear();
+		driver.findElement(By.cssSelector("input[placeholder='Email']")).sendKeys("john@gmail.com");
+
+		// if we have multiple elements matching using xpath then we can use index to
+		// select from all matching xpath elements
+		// ---------> //input[@attribute='value'][index]
+		// ---> //input[@type='text'][2]
+
+		// in css we have
+		/*
+		 * input[type='text']:nth-child(2)
+		 */

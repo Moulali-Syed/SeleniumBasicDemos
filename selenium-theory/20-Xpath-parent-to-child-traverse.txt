@@ -1,0 +1,32 @@
+Xpath: - identifying from entire page we use //
+
+inside form searching for h2
+//form/h2
+
+inside form searching input
+//form/input[3]
+
+
+		driver.findElement(By.xpath("//input[@type='text'][2]")).clear();
+		driver.findElement(By.cssSelector("input[placeholder='Email']")).sendKeys("john@gmail.com");
+
+		driver.findElement(By.cssSelector("input[type='text']:nth-child(3)")).sendKeys("john@gmail.com");
+
+		// if we have multiple elements matching using xpath then we can use index to
+		// select from all matching xpath elements
+		// ---------> //input[@attribute='value'][index]
+		// ---> //input[@type='text'][2]
+
+		// in css we have
+		/*
+		 * input[type='text']:nth-child(2)
+		 */
+
+		// xpath
+		driver.findElement(By.xpath("//form/input[3]")).sendKeys("9829393993");
+		// ---->//parentTag/childtag
+		driver.findElement(By.cssSelector(".reset-pwd-btn")).click();
+
+		// css
+		// in css we use parenttagName childTagName
+		System.out.println(driver.findElement(By.cssSelector("form p")).getText());

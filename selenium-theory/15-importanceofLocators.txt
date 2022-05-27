@@ -1,0 +1,10 @@
+we have unique locator for all the HTML elements
+we have ID
+XPATH
+CSS Selector
+
+name
+Classname
+TagName
+LinkText
+partialLinktext

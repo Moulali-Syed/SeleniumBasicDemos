@@ -1,0 +1,4 @@
+import java.time.Duration;
+
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+implicit wait is like global wait

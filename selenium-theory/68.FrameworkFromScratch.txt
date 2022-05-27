@@ -1,0 +1,1244 @@
+Building Framework from scratch:
+Creation of maven project
+create base utility functions
+organizing page objects
+adding tests
+datadriving/parameterizing tests
+converting into testNG framework
+log4j API for logging inside framework
+TestNG Listeners
+Screenshot on test failures
+creating excellent HTML reports for test results
+Jenkins continous integration
+
+*************************************************************************************************************************************************************************
+Step:1 Create Maven Project
+File - OtherProject - Maven Project - maven-archetype-quickstart - artifact and groupid - finish
+
+Add selenium dependenices in pom.xml file
+
+<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+<dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-java</artifactId>
+    <version>4.1.3</version>
+</dependency>
+
+testng 
+
+<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.5</version>
+    <scope>test</scope>
+</dependency>
+
+
+we have 2 folders pageObject ,utilities will be in main folder
+testcases will be in test folder
+
+Now go to src/main/java , create a class base.java
+In order to invoke browser we need to have it at single place and use it everywhere , instead of having in all testcases
+
+//based on whatever specified in .properties file we should be able to run all our testcases in a specified browser
+
+inside src/main/java create a file data.properties and specify the browser we want to run all testcases
+
+base.java file inside src/main/java
+
+package Framework.E2EProject;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class base {
+	public WebDriver driver;
+
+	public WebDriver initializeDriver() throws IOException {
+
+		// based on whatever specified in .properties file we should be able to run
+		// all our testcases in a specified browser
+
+		Properties prop = new Properties();
+		FileInputStream fis = new FileInputStream(
+				"C:\\Testing\\SeleniumJava\\00-Selenium\\E2EProject\\src\\main\\java\\Framework\\E2EProject\\data.properties");
+		prop.load(fis);
+		String browserName = prop.getProperty("browser");
+		if (browserName.equals("chrome")) {
+			System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+			driver = new ChromeDriver();
+		} else if (browserName.equals("firefox")) {
+			System.setProperty("webdriver.gecko.driver",
+					"C:\\Testing\\Drivers\\geckodriver-v0.31.0-win64\\geckodriver.exe");
+			driver = new FirefoxDriver();
+		} else if (browserName.equals("IE")) {
+			System.setProperty("webdriver.edge.driver", "C:\\Testing\\Drivers\\edgedriver_win64\\msedgedriver.exe");
+			driver = new EdgeDriver();
+		}
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5000));
+		return driver;
+	}
+}
+
+data.properties inside src/main/java
+
+browser=chrome
+
+HomePage.java inside src/test/java
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.Test;
+
+public class HomePage extends base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver=initializeDriver();
+		driver.get("http://qaclickacademy.com");
+	}
+}
+
+By this above steps we can invoke any browser by just changing the browsername in data.properties file
+
+create a package resources inside src/main/java and place base.java , data.properties inside it
+
+*************************************************************************************************************************************************************************
+Step2:Implement PageObject Mechanism
+inside src/main/java create a package pageObjects
+create a file LandingPage.java
+
+nullpointer exception when there is no life , filenot found execption error in file path , no such element exception - error in the element path
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import resources.base;
+
+public class HomePage extends base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver=initializeDriver();
+		driver.get("http://qaclickacademy.com");
+		
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+	}
+}
+
+
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class LandingPage {
+
+	public WebDriver driver;
+	
+	public LandingPage(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	By signin = By.cssSelector("a[href*='sign_in']");
+	
+	public WebElement getLogin() {
+		return driver.findElement(signin);
+	}
+}
+
+*************************************************************************************************************************************************************************
+Create multiple tests with centralized data - PageObject Mechanism
+
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class LandingPage {
+
+	public WebDriver driver;
+	
+	public LandingPage(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	By signin = By.cssSelector("a[href*='sign_in']");
+	
+	public WebElement getLogin() {
+		return driver.findElement(signin);
+	}
+}
+
+
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class LoginPage {
+
+	public WebDriver driver;
+	public LoginPage(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	By email = By.xpath("//input[@id='user_email']");
+	By password = By.xpath("//input[@id='user_password']");
+	By login = By.cssSelector("[value='Log In']");
+	
+	public WebElement getEmail() {
+		return driver.findElement(email);
+	}
+	public WebElement getPassword() {
+		return driver.findElement(password);
+	}
+	public WebElement getLogin() {
+		return driver.findElement(login);
+	}
+	
+	
+}
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class HomePage extends base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver=initializeDriver();
+		driver.get("http://qaclickacademy.com");
+		
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+		
+		LoginPage lp = new LoginPage(driver);
+		lp.getEmail().sendKeys("abc@qw.com");
+		lp.getPassword().sendKeys("123456");
+		lp.getLogin().click();
+	}
+}
+
+*************************************************************************************************************************************************************************
+
+Parameterizing the tests with multiple data with TestNG
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class HomePage extends base {
+
+	@Test(dataProvider="getData")
+	public void basePageNavigation(String username,String password) throws IOException {
+		driver=initializeDriver();
+		driver.get("http://qaclickacademy.com");
+		
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+		
+		LoginPage lp = new LoginPage(driver);
+		lp.getEmail().sendKeys(username);
+		lp.getPassword().sendKeys(password);
+		lp.getLogin().click();
+	}
+	
+	@DataProvider
+	public Object[][] getData() {
+		Object[][] data = new Object[2][2];
+		
+		data[0][0] = "nonrestricteduser@qw.com";
+		data[0][1]="123456";
+		
+		data[1][0] = "restrictedUser";
+		data[1][1] = "89765";
+		
+		return data;
+		
+	}
+}
+
+*************************************************************************************************************************************************************************
+Asserting testcases with validations
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class ValidateTitle extends base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver=initializeDriver();
+		driver.get("http://qaclickacademy.com");
+		
+		LandingPage l = new LandingPage(driver);
+		//compare text from browser with actual text
+		Assert.assertEquals(l.getTitle().getText(),"Featured Courses");
+		//l.getTitle().getText();
+	}
+	
+
+
+}
+
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class LandingPage {
+
+	public WebDriver driver;
+	
+	public LandingPage(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	By signin = By.cssSelector("a[href*='sign_in']");
+	By title = By.xpath("//h2[normalize-space()='Featured Courses']");
+	
+	public WebElement getLogin() {
+		return driver.findElement(signin);
+	}
+	public WebElement getTitle() {
+		return driver.findElement(title);
+	}
+}
+*************************************************************************************************************************************************************************
+Adding tests to suite in framework guidelines
+placing url in data.properties file
+
+browser=chrome
+url=http://qaclickacademy.com
+
+package resources;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class base {
+	public WebDriver driver;
+	public Properties prop;
+
+	public WebDriver initializeDriver() throws IOException {
+
+		// based on whatever specified in .properties file we should be able to run
+		// all our testcases in a specified browser
+
+		prop = new Properties();
+		FileInputStream fis = new FileInputStream(
+				"C:\\Testing\\SeleniumJava\\00-Selenium\\E2EProject\\src\\main\\java\\resources\\data.properties");
+		prop.load(fis);
+
+		String browserName = prop.getProperty("browser");
+
+		if (browserName.equals("chrome")) {
+			System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+			driver = new ChromeDriver();
+		} else if (browserName.equals("firefox")) {
+			System.setProperty("webdriver.gecko.driver",
+					"C:\\Testing\\Drivers\\geckodriver-v0.31.0-win64\\geckodriver.exe");
+			driver = new FirefoxDriver();
+		} else if (browserName.equals("IE")) {
+			System.setProperty("webdriver.edge.driver", "C:\\Testing\\Drivers\\edgedriver_win64\\msedgedriver.exe");
+			driver = new EdgeDriver();
+		}
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5000));
+		return driver;
+	}
+}
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class HomePage extends base {
+
+	@Test(dataProvider="getData")
+	public void basePageNavigation(String username,String password) throws IOException {
+		driver=initializeDriver();
+		driver.get(prop.getProperty("url"));
+		
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+		
+		LoginPage lp = new LoginPage(driver);
+		lp.getEmail().sendKeys(username);
+		lp.getPassword().sendKeys(password);
+		lp.getLogin().click();
+	}
+	
+	@DataProvider
+	public Object[][] getData() {
+		Object[][] data = new Object[2][2];
+		
+		data[0][0] = "nonrestricteduser@qw.com";
+		data[0][1]="123456";
+		
+		data[1][0] = "restrictedUser";
+		data[1][1] = "89765";
+		
+		return data;
+		
+	}
+}
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class ValidateTitle extends base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver=initializeDriver();
+		driver.get(prop.getProperty("url"));
+		
+		LandingPage l = new LandingPage(driver);
+		//compare text from browser with actual text
+		Assert.assertEquals(l.getTitle().getText(),"Featured Courses");
+		//l.getTitle().getText();
+	}
+	
+
+
+}
+*************************************************************************************************************************************************************************
+
+Converting framework into testng and configuring testng.xml file
+
+RightClick on project - testng - convert to testng
+
+add @BeforeMethod and @AfterMethod
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class ValidateTitle extends base {
+
+	@BeforeMethod
+	public void initialize() throws IOException {
+		driver = initializeDriver();
+		driver.get(prop.getProperty("url"));
+	}
+	@Test
+	public void basePageNavigation() throws IOException {
+		
+		
+		LandingPage l = new LandingPage(driver);
+		//compare text from browser with actual text
+		Assert.assertEquals(l.getTitle().getText(),"FEATURED COURSES");
+		//l.getTitle().getText();
+	}
+	
+	@AfterMethod
+	public void teardown() {
+		driver.close();
+	}
+
+
+}
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class HomePage extends base {
+
+	@BeforeMethod
+	public void initialize() throws IOException {
+		driver = initializeDriver();
+		driver.get(prop.getProperty("url"));
+	}
+
+	@Test(dataProvider = "getData")
+	public void basePageNavigation(String username, String password) throws IOException {
+
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+
+		LoginPage lp = new LoginPage(driver);
+		lp.getEmail().sendKeys(username);
+		lp.getPassword().sendKeys(password);
+		lp.getLogin().click();
+	}
+
+	@AfterMethod
+	public void teardown() {
+		driver.close();
+	}
+
+	@DataProvider
+	public Object[][] getData() {
+		Object[][] data = new Object[2][2];
+
+		data[0][0] = "nonrestricteduser@qw.com";
+		data[0][1] = "123456";
+
+		data[1][0] = "restrictedUser";
+		data[1][1] = "89765";
+
+		return data;
+
+	}
+}
+
+
+*************************************************************************************************************************************************************************
+configuring tests with setup and teardown in testng framework
+
+go to  https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html
+
+add this below in pom.xml after url
+this integrates testng with pom.xml 
+
+<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+now goto cmd and the project path and type mvn test , this runs all testcases as per testng.xml file
+*************************************************************************************************************************************************************************
+Integrating log4j api into framework
+go to https://logging.apache.org/log4j/2.x/maven-artifacts.html
+and copy dependencies and paste in pom.xml
+
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.17.2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.17.2</version>
+  </dependency>
+
+inside src/main/java - resources package create a log4j2.xml file
+
+write below
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<!-- name-basePath gives the project path -->
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+
+
+		<Root level="trace">
+			<AppenderRef ref="File" />
+		</Root>
+	</Loggers>
+</Configuration>
+
+we must tell pom.xml file where log4j2.xml file is located
+
+add this below text in pom.xml inside build tag
+<resources>
+			<resource>
+				<directory>src/main/java/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+initialize in all testcases
+private static Logger log = LogManager.getLogger(base.class.getName());
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class HomePage extends base {
+	
+	private static Logger log = LogManager.getLogger(base.class.getName());
+	
+	@BeforeMethod
+	public void initialize() throws IOException {
+		driver = initializeDriver();
+		driver.get(prop.getProperty("url"));
+	}
+
+	@Test(dataProvider = "getData")
+	public void basePageNavigation(String username, String password) throws IOException {
+
+		LandingPage l = new LandingPage(driver);
+		l.getLogin().click();
+
+		LoginPage lp = new LoginPage(driver);
+		lp.getEmail().sendKeys(username);
+		lp.getPassword().sendKeys(password);
+		lp.getLogin().click();
+		log.info("Login unsuccesful");
+	}
+
+	@AfterMethod
+	public void teardown() {
+		driver.close();
+	}
+
+	@DataProvider
+	public Object[][] getData() {
+		Object[][] data = new Object[2][2];
+
+		data[0][0] = "nonrestricteduser@qw.com";
+		data[0][1] = "123456";
+
+		data[1][0] = "restrictedUser";
+		data[1][1] = "89765";
+
+		return data;
+
+	}
+}
+
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+
+import pageObjects.LandingPage;
+import pageObjects.LoginPage;
+import resources.base;
+
+public class ValidateTitle extends base {
+	private static Logger log = LogManager.getLogger(base.class.getName());
+	@BeforeMethod
+	public void initialize() throws IOException {
+		driver = initializeDriver();
+		log.info("driver is initialized");
+		driver.get(prop.getProperty("url"));
+		log.info("Navigated to Home Page");
+	}
+	@Test
+	public void basePageNavigation() throws IOException {
+		
+		
+		LandingPage l = new LandingPage(driver);
+		//compare text from browser with actual text
+		Assert.assertEquals(l.getTitle().getText(),"FEATURED COURSES");
+		//l.getTitle().getText();
+		log.info("Successfully validated text message");
+	}
+	
+	@AfterMethod
+	public void teardown() {
+		driver.close();
+	}
+
+
+}
+
+
+Now run thru cmd - mvn test
+and refresh project then we will get logs folder with .log file
+*************************************************************************************************************************************************************************
+To make our testcases run in parallel we must add
+public WebDriver driver ;  
+in all testcases 
+
+this helps in running parallel mode also
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="tests">
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="Framework.E2EProject.ValidateTitle"/>
+      <class name="Framework.E2EProject.AppTest"/>
+      <class name="Framework.E2EProject.HomePage"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+<suite name="Suite" parallel="tests"> this runs tests in parallel
+*************************************************************************************************************************************************************************
+Take screenshot on testcase failure
+
+we can do this using testng listener
+
+version error - https://stackoverflow.com/questions/54859623/references-to-interface-static-methods-are-allowed-only-at-source-level-1-8-or-a
+
+create a listeners class and then implements ITestListener
+and then right click source add /implement methods
+
+<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+create listeners class
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+import resources.base;
+
+public class ListenersImplement extends base implements ITestListener {
+
+	@Override
+	public void onTestStart(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+		// TODO Auto-generated method stub
+		WebDriver driver = null;
+		String testMethodName = result.getMethod().getMethodName();
+		try {
+			driver = (WebDriver)result.getTestClass().getRealClass().getDeclaredField("driver").get(result.getInstance());
+		} catch(Exception e) {
+			
+		}
+		try {
+			getScreenShotPath(testMethodName,driver);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailedWithTimeout(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStart(ITestContext context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFinish(ITestContext context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
+
+Add a method in base.java
+
+package resources;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class base {
+	public WebDriver driver;
+	public Properties prop;
+
+	public WebDriver initializeDriver() throws IOException {
+
+		// based on whatever specified in .properties file we should be able to run
+		// all our testcases in a specified browser
+
+		prop = new Properties();
+		FileInputStream fis = new FileInputStream(
+				"C:\\Testing\\SeleniumJava\\00-Selenium\\E2EProject\\src\\main\\java\\resources\\data.properties");
+		prop.load(fis);
+
+		String browserName = prop.getProperty("browser");
+
+		if (browserName.equals("chrome")) {
+			System.setProperty("webdriver.chrome.driver", "C:\\Testing\\Drivers\\chromedriver_win32\\chromedriver.exe");
+			driver = new ChromeDriver();
+		} else if (browserName.equals("firefox")) {
+			System.setProperty("webdriver.gecko.driver",
+					"C:\\Testing\\Drivers\\geckodriver-v0.31.0-win64\\geckodriver.exe");
+			driver = new FirefoxDriver();
+		} else if (browserName.equals("IE")) {
+			System.setProperty("webdriver.edge.driver", "C:\\Testing\\Drivers\\edgedriver_win64\\msedgedriver.exe");
+			driver = new EdgeDriver();
+		}
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5000));
+		return driver;
+	}
+	
+	public void getScreenShotPath(String testcaseName,WebDriver driver) throws IOException {
+		TakesScreenshot ts = (TakesScreenshot)driver;
+		File source = ts.getScreenshotAs(OutputType.FILE);
+		String destinationFile = System.getProperty("user.dir")+"\\reports\\"+testcaseName+".png";
+		FileUtils.copyFile(source,new File(destinationFile));
+	}
+}
+
+in testng.xml add listeners tag
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="tests">
+
+	<listeners>
+		<listener class-name="Framework.E2EProject.ListenersImplement"></listener>
+	</listeners>
+	<test thread-count="5" name="Test">
+		<classes>
+			<class name="Framework.E2EProject.ValidateTitle" />
+			<class name="Framework.E2EProject.AppTest" />
+			<class name="Framework.E2EProject.HomePage" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
+*************************************************************************************************************************************************************************
+Extent Reports generation on test execution
+
+in resources package create a new class
+
+<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+<dependency>
+    <groupId>com.aventstack</groupId>
+    <artifactId>extentreports</artifactId>
+    <version>5.0.9</version>
+</dependency>
+
+
+
+package resources;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
+public class ExtentReportsGenration {
+	ExtentReports extent;
+
+	public ExtentReports getReportObject() {
+		// ExtentReports , ExtentSparkReporter
+				// user.dir gives project path
+				String path = System.getProperty("user.dir") + "\\reports\\index.html";
+				ExtentSparkReporter reporter = new ExtentSparkReporter(path);
+
+				// set the report name and document title
+				reporter.config().setReportName("Web Automation Results");
+				reporter.config().setDocumentTitle("Test Results");
+
+				extent = new ExtentReports();
+				extent.attachReporter(reporter);
+				extent.setSystemInfo("Tester", "Moulali");
+				
+				return extent;
+	}
+}
+
+
+then in listeners case add code 
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+
+import resources.ExtentReportsGenration;
+import resources.base;
+
+public class ListenersImplement extends base implements ITestListener {
+
+	ExtentReports extent = ExtentReportsGenration.getReportObject();
+	ExtentTest test;
+	@Override
+	public void onTestStart(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+		test = extent.createTest(result.getMethod().getMethodName());
+		
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		// TODO Auto-generated method stub
+		test.log(Status.PASS, "Test Passed");
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+		test.fail(result.getThrowable());
+		WebDriver driver = null;
+		String testMethodName = result.getMethod().getMethodName();
+		try {
+			driver = (WebDriver)result.getTestClass().getRealClass().getDeclaredField("driver").get(result.getInstance());
+		} catch(Exception e) {
+			
+		}
+		try {
+			getScreenShotPath(testMethodName,driver);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailedWithTimeout(ITestResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStart(ITestContext context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFinish(ITestContext context) {
+		// TODO Auto-generated method stub
+		extent.flush();
+	}
+
+}
+
+
+for onteststart,pass,failure
+*************************************************************************************************************************************************************************
+How to make framework thread safe for parallel execution
+
+ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+
+this helps to run thread safe
+
+package Framework.E2EProject;
+
+import java.io.IOException;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+
+import resources.ExtentReportsGenration;
+import resources.base;
+
+public class ListenersImplement extends base implements ITestListener {
+
+	ExtentReports extent = ExtentReportsGenration.getReportObject();
+	ExtentTest test;
+	ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+
+	@Override
+	public void onTestStart(ITestResult result) {
+		// TODO Auto-generated method stub
+
+		test = extent.createTest(result.getMethod().getMethodName());
+		extentTest.set(test);
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		// TODO Auto-generated method stub
+		extentTest.get().log(Status.PASS, "Test Passed");
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+		// TODO Auto-generated method stub
+
+		extentTest.get().fail(result.getThrowable());
+		WebDriver driver = null;
+		String testMethodName = result.getMethod().getMethodName();
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+
+		}
+		try {
+			extentTest.get().addScreenCaptureFromPath(getScreenShotPath(testMethodName, driver),
+					result.getMethod().getMethodName());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTestFailedWithTimeout(ITestResult result) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStart(ITestContext context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onFinish(ITestContext context) {
+		// TODO Auto-generated method stub
+		extent.flush();
+	}
+
+}
+
+*************************************************************************************************************************************************************************
+<build>
+
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>

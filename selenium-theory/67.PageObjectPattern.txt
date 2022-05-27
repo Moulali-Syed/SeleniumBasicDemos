@@ -1,0 +1,177 @@
+Page Object Pattern
+
+Easy to maintain
+Easy readability of scripts
+Reduce or eliminate duplicacy
+reusability of code
+reliability
+*****************************************************************************************************************************************************************
+suppose our website is Rediff
+ 
+Land on homepage and write all required elements from webpage and place in a java class
+then for loginpage create a class and keep all objects in that class
+****************************************************************************************************************************************************************************************
+
+Page Object Repository Mechanism
+
+create a java project , inside src folder create 2 packages called objectrepository , packages
+in objectrepository package create a class RediffLoginPage , RediffHomePage
+
+package objectrepository;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class RediffLoginPage {
+
+	WebDriver driver;
+	
+	public RediffLoginPage(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	By username = By.xpath(".//*[@id='login1']");
+	By password = By.name("passwd");
+	By go = By.name("proceed");
+	By home = By.linkText("Home");
+	
+
+	public WebElement Email() {
+		// TODO Auto-generated method stub
+		return driver.findElement(username);
+	}
+	
+	public WebElement Password() {
+		return driver.findElement(password);
+	}
+	
+	public WebElement Submit() {
+		return driver.findElement(go);
+	}
+	
+	public WebElement Home() {
+		return driver.findElement(home);
+	}
+
+}
+
+
+package objectrepository;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class RediffHomePage {
+
+	WebDriver driver;
+
+	public RediffHomePage(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	By search = By.id("srchword");
+	By submit = By.xpath("//input[@type='submit']");
+
+	public WebElement Search() {
+		return driver.findElement(search);
+	}
+	
+	public WebElement SubmitBtn() {
+		return driver.findElement(submit);
+	}
+}
+
+
+package testcases;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.Test;
+
+import objectrepository.RediffHomePage;
+import objectrepository.RediffLoginPage;
+
+public class Loginapplication {
+
+	@Test
+	public void Login() {
+		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://rediff.com/");
+		
+		RediffLoginPage rd = new RediffLoginPage(driver);
+		
+		rd.Email().sendKeys("hello");
+		rd.Password().sendKeys("hello");
+		//rd.Submit().click();
+		
+		rd.Home().click();
+		
+		RediffHomePage rh = new RediffHomePage(driver);
+		rh.Search().sendKeys("rediff");
+		rh.SubmitBtn().click();
+	}
+}
+
+****************************************************************************************************************************************************************************************
+
+Page Factory Annotations FindBy
+
+package objectrepository;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class RediffLoginPagePageFactory {
+
+	WebDriver driver;
+	
+	public RediffLoginPagePageFactory(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	
+	/*
+	By username = By.xpath(".//*[@id='login1']");
+	By password = By.name("passwd");
+	By go = By.name("proceed");
+	By home = By.linkText("Home");
+	*/
+
+	@FindBy(xpath=".//*[@id='login1']")
+	WebElement username ;
+	
+	@FindBy(name="passwd")
+	WebElement password;
+	
+	@FindBy(name="proceed")
+	WebElement go;
+	
+	@FindBy(linkText="Home")
+	WebElement home;
+	
+	public WebElement Email() {
+		// TODO Auto-generated method stub
+		return username;
+	}
+	
+	public WebElement Password() {
+		return password;
+	}
+	
+	public WebElement Submit() {
+		return go;
+	}
+	
+	public WebElement Home() {
+		return home;
+	}
+
+}
+****************************************************************************************************************************************************************************************
+
