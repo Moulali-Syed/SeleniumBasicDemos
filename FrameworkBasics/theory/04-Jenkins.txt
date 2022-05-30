@@ -1,0 +1,109 @@
+Jenkins:
+Jenkins a continuous integration tool
+
+Schedule testcases to run at morning 2am
+we can create a job in jenkins , so that it can run the testcases
+
+
+Install and configure Jenkins:
+search jenkins download
+download .war file
+
+install and configure jenkins
+go to https://www.jenkins.io/download/
+ and download .war file
+
+now open cmd and go to the .war file location
+and write
+java -jar jenkins.war -httpPort=8080
+
+and press enter we will get as below
+
+Jenkins initial setup is required. An admin user has been created and a password generated.
+Please use the following password to proceed to installation:
+
+47d3ed1820c84612a14091e59b9806bf
+
+This may also be found at: C:\Users\MOULALI\.jenkins\secrets\initialAdminPassword
+
+
+Now open localhost:8080 and give the above admin password and click on custom download
+
+creating admin user
+username: Moulali
+password: Apple123@
+fullname: Moulali Syed
+email: syedmoulali1997@gmail.com
+
+open local host --> http://localhost:8080/
+click on manage jenkins  - global tool configuration 
+click on JDK Installations and provide jdk path from our machine , i.e JAVA_HOME path from environmental variables
+D:\Program Files\Java\jdk-11.0.12
+name :  jdk-11.0.12
+
+similarly provide MAVEN_HOME path
+apache-maven-3.8.5
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+and click on save
+
+
+Step1: in cmd --> java -jar jenkins.war -httpPort=8080
+Step2: in localhost:8080 --> manage Jenkins,GlobalToolConfig, providr JAVA_HOME & MAVEN_HOME
+Step3: localhost:8080 --> click on NewItem , give name as  Mavenjob , select Freestyle project
+in real time in Source code management , we provide the git url 
+but here we r having code in local machine , in order jenkins to understand it , in general tab click on advanced 
+checkmark use custom workspaces
+Now go to the project u want to run and copy it
+Then go to the jenkins path in my machine , i have in C:\Users\MOULALI\.jenkins , here paste the project which u copied , u want to run
+now provide - ${JENKINS_HOME}/ProjectName as directory , custom workspace
+pom.xml must be present at project level 
+my provided path - ${JENKINS_HOME}/MavenJava
+
+Now go to Build Environment tab --> Build ---> add build step --> Invoke top-level maven target --> provide the maven version
+--> now provide the maven command , we can ignore mvn and provide  test -PRegression
+and click on Save , then click on Build Now
+from build history click on the build 
+click on console output
+u can see the execution results
+===============================================================================================================================
+
+
+TestNG reporting plugin into jenkin jobs:
+
+Now go to project , refresh , inside target folder we have surefire-reports , inside we have index.html file , copy its path and open in browser
+and also we can see testng-results.xml file , we have to pass this testng-results.xml file in jenkins
+jenkins has a testng reports plugin
+
+Go to manage Jenkins --> available --> search testng and install testng results plugin
+
+Now go to job --> configure  --> Build --> Post-build Actions  --> select publish TESTNG results  --> Save
+
+Schedule periodically:
+configure job --> Source Code management --> Build Triggers --> Build Periodically [checkmark this] --> give 0 7 * * *
+
+Then click on Build now , now we can see that testNg results got generated , click on testNG results and see the detailed execution
+
+
+Minutes Hours DayMonth Month  DayWeek
+Then go to SourceCodeManagement --> select build periodically and give time as below 0 7 * * * , it will run automatically if server is up and running at specified time
+
+
+we have to give Minutes Hour Day Month DayWeek
+
+M H D M DayWeek
+0 7 * * *
+if server is up it will run automatically
+0minutes 7 hoursInMng everyday everymonth everyweekDay
+
+once runs happening daily we will also get the testNG results trend graph
+===============================================================================================================================
+
+BuildNow - trigger project
+Delete Project - deletes the job
+Configure - to make any changes to the job
+Changes - for every build if we make any changes , we can see that changes
+
+
+
+
+
