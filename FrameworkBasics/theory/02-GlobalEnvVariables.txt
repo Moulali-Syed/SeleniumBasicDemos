@@ -1,0 +1,29 @@
+how to driver global environment values from external files to tests in java
+
+create a java file and a .properties file
+
+
+public class GlobalValuesDrive {
+	public static void main(String[] args) throws IOException {
+
+		Properties prop = new Properties();
+		FileInputStream fis = new FileInputStream(
+				"C:\\Testing\\SeleniumJava\\FrameworkBasics\\TestNGTutorial\\src\\data.properties");
+
+		prop.load(fis);
+		System.out.println(prop.getProperty("browser"));
+
+		// to update values
+		prop.setProperty("browser", "firefox");
+		System.out.println(prop.getProperty("browser"));
+
+		FileOutputStream fos = new FileOutputStream(
+				"C:\\Testing\\SeleniumJava\\FrameworkBasics\\TestNGTutorial\\src\\data.properties");
+
+		prop.store(fos, null);
+	}
+}
+
+
+data.properties file:
+browser=chrome
