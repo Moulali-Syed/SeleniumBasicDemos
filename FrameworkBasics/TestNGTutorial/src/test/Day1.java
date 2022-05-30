@@ -15,7 +15,8 @@ public class Day1 {
 		System.out.println("hello");// we will write some automation code here
 	}
 
-	@Test
+	
+	@Test(timeOut=4000)
 	public void SecondTest() {
 		System.out.println("Bye");
 	}

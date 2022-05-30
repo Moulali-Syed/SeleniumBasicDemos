@@ -390,20 +390,169 @@ The maximum number of milliseconds this test should take. If it hasn't returned 
 
 
 ============================================================================================================================================================
+paramterizing from testNG xml:
+
+if u feel the values which we r sending is common the whole suite , then inside it
+or it is specific to some module we can send it inside test
 
 
+@Parameters({"URL"})
+	@Test
+	public void Demo1(String urlName) {
+		System.out.println("Hey There");
+		System.out.println(urlName);
+	}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Loan Department">
+<parameter name="URL" value="qaclickacademy.com"></parameter>   <!-- parameter we want to pass at the suite level  -->
+	<test name="Personal Loan">
+		<classes>
+			<class name="test.Day1" />
+			<class name="test.Day2" />
+			<class name="test.Day4" />
+		</classes>
+	</test>
+	<test name="Car Loan">
+		<classes>
+			<class name="test.Day3">
+				<methods>
+					<exclude name="Mobile.*"></exclude>
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+</suite> 
+
+passing parameters from test level
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Loan Department">
+	<parameter name="URL" value="qaclickacademy.com"></parameter>
+	<test name="Personal Loan">
+		<parameter name="URL" value="personalLoan.com"></parameter>
+		<classes>
+			<class name="test.Day1" />
+			<class name="test.Day2" />
+			<class name="test.Day4" />
+		</classes>
+	</test>
+	<test name="Car Loan">
+		<parameter name="URL" value="carLoan.com"></parameter>
+		<classes>
+			<class name="test.Day3">
+				<methods>
+					<exclude name="Mobile.*"></exclude>
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+</suite> 
+
+all testcases in particular test folder , we take respective parameter
+
+============================================================================================================================================================
+DataProvider Annotation:
+Parameterizing with multiple data sets by running tests with multiple combination
+
+@Test(dataProvider = "getData")
+	public void loginWithMultipleIds(String username, String password) {
+		System.out.println(username);
+		System.out.println(password);
+	}
+
+	@DataProvider
+	public Object[][] getData() {
+
+		// step1: create multi dimensional array
+		Object[][] data = new Object[3][2];
+		// step2
+		data[0][0] = "firstusername";
+		data[0][1] = "password";
+		data[1][0] = "secondusername";
+		data[1][1] = "password2";
+		data[2][0] = "thirdusername";
+		data[2][1] = "password3";
+
+		// step3
+		return data;
+
+	}
+
+============================================================================================================================================================
+Listeners interface in TestNG:
+These are listeners that will run after some testcase got failed
+listeners will invoke method based on if testcase is passed or failed
+
+//step1 : create a class ListenersConifg
+we have ITestListener , which is an interface that has all the methods for the testNG listeners
+
+//step2: this class implements ITestListener
+//step3: right click --> source --> override/implement methods
 
 
+//step4:we must provide the Listeners class location in testng.xml file , after suite tag , before test tag
 
+<suite name="Loan Department">
+	<listeners>
+		<listener class-name="test.ListenersConfig"></listener>
+	</listeners>
+	<parameter name="URL" value="qaclickacademy.com"></parameter>
+	<test name="Personal Loan">
+
+thus whatever we define inside the @Override methods will run based on test success and failure
+
+
+To know which testcase is getting failed we can know using the result parameter
+@Override
+	public void onTestFailure(ITestResult result) {
+		//prints failed testcase name
+		System.out.println("Failed testcase name is :" + result.getName());
+	}
+
+============================================================================================================================================================
+Running Tests in parallel and generating reports:
+
+Running Tests in parallel
+At suite level , 
+<suite name="" parallel="tests" thread-count="2">
+parallel="tests"
+this will run the test folders in parallel
+thread-count="2"
+means to run 2 test folders in parallel
+
+
+Running Tests in parallel
+at test level
+<test name="" parallel="classes" thread-count="2">
+
+
+after executing test cases we can see the folder test-output , inside it we have index.html file,take the entore path
+and paste it in browser , we can see the testng generated some default report
 
 
 
 ============================================================================================================================================================
 
+TestNG interview Questions:
+1.what is TestNG - is a testing framework designed to simplify a broad range of testing needs, test next generation , unit testing to integration testing
 
+2.What are the advantages of TestNG?
+  testng provides parallel execution of test methods
+  allows to define dependency of one test method over other method
+  allows to assign priority to test methods
+  allows groupong of test methods into test groups
+  has support for parameterizing test cases using @Parameters annotation
+  allows data driven testing using @DataProvider
+  has different assertions that helps in checking expected and actual results
+  detailed HTML reports
 
+3.Annotations in TestNG?
+  @BeforeGroups , @AfterGroups
 
-
-
-
-============================================================================================================================================================
+4.testng.xml tags in parent to child order?
+  suite  --->  test  ---> classes ---> class  ---> methods
