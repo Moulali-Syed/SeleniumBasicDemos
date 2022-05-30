@@ -1,0 +1,196 @@
+Apache Maven is a software project management and build management tool for java frameworks
+
+Why Maven?
+Central repository to get dependencies -        we get all jars and libraries from mvn repo
+Maintaing common structure across organization - maven provides a standard architecture
+Flexibility in integrating with CI Tools     -  to help in integrating with jenkins
+Plugins for test framework execution	-     
+
+we can read about maven by searching maven in 5 minutes
+
+
+*********************** Install Maven and configure ***********************************
+go to  https://maven.apache.org/download.cgi
+and download apache-maven-3.8.5-bin.zip and extract and copy path upto before bin
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+
+in environmental variables 
+create new 
+MAVEN_HOME
+C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+
+copy bin folder path and place in path variable add and paste path C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5\bin
+
+
+in cmd
+check mvn --version , if shown as below then maven is installed successfully
+
+C:\Users\MOULALI>mvn --version
+Apache Maven 3.8.5 (3599d3414f046de2324203b78ddcf9b5e4388aa0)
+Maven home: C:\Users\MOULALI\Downloads\apache-maven-3.8.5-bin\apache-maven-3.8.5
+Java version: 11.0.12, vendor: Oracle Corporation, runtime: D:\Program Files\Java\jdk-11.0.12
+Default locale: en_IN, platform encoding: Cp1252
+OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+
+Artifact: An artifact is a file, usually a JAR, that gets deployed to a Maven repository.
+ GroupId: groupId will identify your project uniquely across all projects,
+
+*******************************************************************************************************************************************************************************
+group id : identify project uniquely
+artifact id : sub project from the main project , is like a jar name
+
+creating maven project with eclipse
+new - project - maven - maven project - select maven-archetype-quickstart  template - provide group id - projectName , artifact id - sub project
+
+project name - artifact id
+package name - we can give by default it will be groupid.artifactid
+
+pom.xml file is heart of maven project
+
+src/main/java - we write all utilities 
+src/test/java - we write testcases
+this way we have seperation between testcases and utilities
+
+*******************************************************************************************************************************************************************************
+add dependencies - testng , selenium-java , rest-assured , java-client[appium] dependencies
+
+To run all test cases using maven , we have maven surefire plugin - used to execute all testcases
+
+search maven sureplugin in google , usage , copy the plugin
+
+using maven surefire plugin we can run all testcases in maven project
+
+above dependencies paste this
+<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M6</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+*******************************************************************************************************************************************************************************
+Go to cmd --> project path 
+and execute
+mvn clean [pom.xml must be at project level]
+Then we get BUILD Success [if there were previous executions , then it will go and clean previous executions]
+
+mvn compile [to check compilation errors/syntax errors]
+
+mvn test [if mvn compile is not done , before this it will compiles and then executes , also checks for all the dependencies to be present in .m2 folder]
+
+$$$$$$$ very important  $$$$$$$$$$$$
+In order to recognize our testcases by maven  , the class names must end with Test
+
+
+all our jar files downloaded will be in .m2 folder ,
+we can check that path in windows - preferences - maven - user settings
+
+
+*******************************************************************************************************************************************************************************
+Integration of TestNG with Maven:
+
+Right click on project --> testng ---> convert to testng --> Finish
+
+go to maven documentation , maven surefire plugin , using testng
+https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html
+
+Using Suite XML Files :  This allows flexible configuration of the tests to be run. 
+
+<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M6</version>
+					<configuration>
+						<suiteXmlFiles>
+							<suiteXmlFile>testng.xml</suiteXmlFile>
+						</suiteXmlFiles>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+now when we run mvn test thru command prompt , it will run based on testng.xml file only
+
+
+*******************************************************************************************************************************************************************************
+if we want to run only one testcase we can use
+mvn -Dtest=TestCaseName test
+
+ex:  mvn -Dtest=AppiumTest test
+
+*******************************************************************************************************************************************************************************
+Switching the tests with maven profiling:
+
+If we have multiple testng.xml files , like one for Regression , one for Smoke , ...
+
+for this we have to use profiles inside pom.xml file
+
+
+<profiles>
+		<profile>
+			<id>Regression</id>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.0.0-M6</version>
+							<configuration>
+								<suiteXmlFiles>
+									<suiteXmlFile>testng.xml</suiteXmlFile>
+								</suiteXmlFiles>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>Smoke</id>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.0.0-M6</version>
+							<configuration>
+								<suiteXmlFiles>
+									<suiteXmlFile>testng2.xml</suiteXmlFile>
+								</suiteXmlFiles>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
+
+to run this using maven  based on profiles , we have to use
+mvn test -PSomke
+    or
+mvn test -PRegression
+
+
+-P represents ,profile
+
+
+
+
+
+
+
+
+
