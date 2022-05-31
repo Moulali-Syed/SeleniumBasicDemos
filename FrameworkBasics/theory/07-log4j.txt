@@ -1,0 +1,253 @@
+Apache log4j:
+log4j is reliable fast and flexible logging framework written in java , which is distributed under the Apache software license
+
+why log4j?
+send entire logs of file/testcases
+log only when there is error for package A
+log entire messages for package B
+I want logs with timestamps
+I want log file of last week
+How will I know if there is an error by just looking at logs
+
+
+===========================================================================================================================================================
+
+add dependency
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.17.2</version>
+</dependency>
+
+these 2 jars will get added log4j-api-version , log4j-core-version in maven dependencies
+
+or
+
+importing log4j to eclipse project
+ search apache log4j download and download https://logging.apache.org/log4j/2.x/download.html  -- apache-log4j-2.17.2-bin.zip  from here
+
+Now create a java project , go to build path and import [log4j-api-version , log4j-core-version]
+
+
+Create 2 packages - alpha , beta
+inside alpha package create a class Demo
+
+
+
+
+step1:add dependency and check in maven dependency folder for log4j-api-version , log4j-core-version
+step2:create a class and create a static instance ,class level variable
+	private static Logger log = LogManager.getLogger(Demo.class.getName());  [and have this - import org.apache.logging.log4j.*;]
+step3;now u can use simple logs , that will print error,fatal logs to console
+import org.apache.logging.log4j.*;
+
+public class Demo {
+
+	private static Logger log = LogManager.getLogger(Demo.class.getName());
+
+	public static void main(String[] args) {
+
+		log.debug("Iam debugging");
+
+		if (5 > 4) {
+			log.info("Object is present");
+		}
+		log.error("Object is not present");
+
+		log.fatal("this is fatal");
+
+	}
+}
+
+
+
+===========================================================================================================================================================
+Usage 
+log.error() - to log when elements are not displayed in the page or if any validations fail
+
+log.debug() - each selenium action is performed like click, sendkeys,getText
+
+log.info() - when operation is successfully completed ex:after loading page or after any successful validations ,it is just counter part to log.error()
+
+===========================================================================================================================================================
+Importance of log4j.xml file
+go to https://logging.apache.org/log4j/2.x/manual/configuration.html
+
+copy below basic xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+
+we have 2 main tags , Appenders and Loggers
+where to log?
+	where to log will be found in appender tag
+	in appenders if we give console - then output will print in console
+	if we give file then output will go to file
+What to log?
+	inside Loggers we have Root tag with level as error , then it will log only errors
+	if we want all logs we can set the level as trace
+
+How to log?
+	inside appenders , console tag we have pattern layout
+
+
+
+===========================================================================================================================================================
+understanding the xml file to control logging in testcase:
+It must be created at project level
+create a new  package name it resources , inside it create log4j2.xml file
+
+and paste 
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+
+if we give Root level="trace"
+it will print all the logs
+
+now go to project build path  --> source --> Add Folder ---> select the resources folder at the project level --> ok --> Apply and close
+now our java class will have knowledge of log4j2.xml file
+
+now by just changing the log level inside Root level="trace"/error/debug we can get different logs
+===========================================================================================================================================================
+paste the same demo class in to beta package , and rename it as Demo1
+
+now in alpha package we have Demo class , in beta package we have Demo1 class
+we have a requirement of different log levels in both packages
+
+inside Loggers tag create logger tag and provide the package name.className
+
+<Loggers>
+		<Logger name="alpha.Demo" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+
+additivity="false" - this makes testcase to run only once
+
+by this we can control the logs
+===========================================================================================================================================================
+testcase logging with log4j - log into file instead of console
+create a logs folder at project level
+
+
+<Appenders>
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+
+<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+fileName attibute value we will provide the path of the log file
+
+
+to get path , write this code above appenders tag
+<Properties>
+		<Property name="basePath">./logs</Property>
+	</Properties>
+
+name=basePath gives the project path , there after we want to go logs package
+
+now execute testcase Demo.java it will print logs into prints.log inside logs folder at project level
+
+===========================================================================================================================================================
+log4j2.xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="alpha.Demo" level="error" additivity="false">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
+
+
+===========================================================================================================================================================
+package alpha;
+
+import org.apache.logging.log4j.*;
+
+public class Demo {
+
+	private static Logger log = LogManager.getLogger(Demo.class.getName());
+
+	public static void main(String[] args) {
+
+		log.debug("Iam debugging");
+
+		if (5 > 4) {
+			log.info("Object is present");
+		}
+		log.error("Object is not present");
+
+		log.fatal("this is fatal");
+
+	}
+}
+
+
+package beta;
+
+import org.apache.logging.log4j.*;
+
+public class Demo1 {
+
+	private static Logger log = LogManager.getLogger(Demo1.class.getName());
+
+	public static void main(String[] args) {
+
+		log.debug("Iam debugging");
+
+		if (5 > 4) {
+			log.info("Object is present");
+		}
+		log.error("Object is not present");
+
+		log.fatal("this is fatal");
+
+	}
+}
