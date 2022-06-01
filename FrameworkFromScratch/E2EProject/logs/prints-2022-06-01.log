@@ -1,0 +1,9 @@
+09:30:43.757 [main] INFO  academy.Base - driver is closed
+09:30:45.340 [main] INFO  academy.Base - driver is initialized
+09:31:43.946 [main] INFO  academy.Base - Navigated to HomePage
+09:31:54.948 [main] INFO  academy.Base - username entered
+09:31:55.131 [main] INFO  academy.Base - password entered
+09:31:55.836 [main] INFO  academy.Base - driver is closed
+09:31:57.397 [main] INFO  academy.Base - driver is initialized
+09:33:09.870 [main] INFO  academy.Base - Navigated to HomePage
+09:33:18.858 [main] INFO  academy.Base - Text validated successfully

@@ -1,0 +1,402 @@
+End to End Framework development from scratch:
+1.create Maven project
+2.Create Page Object Files
+3.Implement reusable utilities and centralized variables
+4.write testcases
+5.convert project to testng
+6.Implement data driving and parameterizing pratcies
+7.inject log4j logging
+8.build excellent HTML reports
+9.Integrate with Jenkins 
+
+Step1:
+create maven project
+File - new - other - maven project - either check mark skip archtype selection/or select maven quickstart archetype - provide groupId ,artifactId - Finish
+
+Step2:
+Add dependencies in pom.xml
+		go to mvn repo - search selenium java - add it to pom
+					search testng       - add it to pom
+
+Step3:
+Whatever testcases will be in src/test/java | utilities ,page objects , .. will be in src/main/java
+Inside src/main/java - create a package - create a class name it Base class - all testcases will get the browser invocations from this Base class
+[because we cant update in all testcases , if we need to chnage any browser invocation]
+
+Step4:
+The browser name , must come from a global env variables , which are in .properties file
+create data.properties file inside src/test/main - inside package
+
+Step5:
+Inside Base class write code to read the properties file and invoke the browser based on it.
+Also add WebDriverManager dependency inside the pom.xml file
+
+Step6:Add Implicit wait and return the driver from Base class
+
+Step7:Inside src/test/java create a class HomePage and extend Base class , thus driver will come from Base class
+
+=====================================================================================================================================================================
+public class Base {
+	public WebDriver driver;
+
+	public WebDriver initializeDriver() throws IOException {
+		Properties prop = new Properties();
+		String path = System.getProperty("user.dir") + "\\src\\main\\java\\academy\\data.properties";
+		FileInputStream fis = new FileInputStream(path);
+
+		prop.load(fis);
+		String browserName = prop.getProperty("browser");
+
+		if (browserName.equalsIgnoreCase("chrome")) {
+			WebDriverManager.chromedriver().setup();
+			driver = new ChromeDriver();
+		} else if (browserName.equalsIgnoreCase("firefox")) {
+			WebDriverManager.firefoxdriver().setup();
+			driver = new FirefoxDriver();
+		} else if (browserName.equalsIgnoreCase("IE")) {
+			WebDriverManager.iedriver().setup();
+			driver = new InternetExplorerDriver();
+		}
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		return driver;
+	}
+}
+
+data.properties
+browser=chrome
+
+HomePage.java
+public class HomePage extends Base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver = initializeDriver();
+		driver.get("https://qaclickacademy.com");
+	}
+}
+=====================================================================================================================================================================
+Step8:
+Implement page object class
+inside src/main/java - create a package resources - move data.properties into it
+create a package - pageObjects - create a class LandingPage , LoginPage
+
+public class LandingPage {
+
+	public WebDriver driver;
+
+	public LandingPage(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	By signIn = By.cssSelector("a[href*='sign_in']");
+
+	By popup = By.xpath("//button[text()='NO THANKS']");
+
+	public WebElement getLogin() {
+		return driver.findElement(signIn);
+	}
+
+	public WebElement clickPopup() {
+		return driver.findElement(popup);
+	}
+}
+
+
+public class LoginPage {
+
+	public WebDriver driver;
+
+	public LoginPage(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	By email = By.cssSelector("input[id='user_email']");
+
+	By password = By.cssSelector("input#user_password");
+
+	By submit = By.cssSelector("input[type='submit']");
+
+	public WebElement email() {
+		return driver.findElement(email);
+	}
+
+	public WebElement password() {
+		return driver.findElement(password);
+	}
+
+	public WebElement submit() {
+		return driver.findElement(submit);
+	}
+}
+
+
+public class HomePage extends Base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver = initializeDriver();
+		driver.get("https://qaclickacademy.com");
+
+		// we can use inheritance or create object of class
+		LandingPage l = new LandingPage(driver);
+		l.clickPopup().click();
+		l.getLogin().click();
+
+		LoginPage lp = new LoginPage(driver);
+		lp.email().sendKeys("abc@qw.com");
+		lp.password().sendKeys("123456");
+		lp.submit().click();
+	}
+}
+
+=====================================================================================================================================================================
+Step9: 
+parameterizing tests with multiple data with TestNG
+
+public class HomePage extends Base {
+
+	@Test(dataProvider = "getData")
+	public void basePageNavigation(String username, String password, String text) throws IOException {
+		driver = initializeDriver();
+		driver.get("https://qaclickacademy.com");
+
+		// we can use inheritance or create object of class
+		LandingPage l = new LandingPage(driver);
+		l.clickPopup().click();
+		l.getLogin().click();
+
+		LoginPage lp = new LoginPage(driver);
+		lp.email().sendKeys(username);
+		lp.password().sendKeys(password);
+		System.out.println(text);
+		lp.submit().click();
+	}
+
+	@DataProvider
+	public Object[][] getData() {
+
+		// Object takes total count - 2 here is 2 sets of data , 3 is 3 parameters in
+		// each data set
+		Object[][] data = new Object[2][3];
+		data[0][0] = "nonrestricteduser@qw.com";
+		data[0][1] = "123456";
+		data[0][2] = "non restricted user";
+		data[1][0] = "restricteduser@qw.com";
+		data[1][1] = "64532100";
+		data[1][2] = "restricted user";
+
+		return data;
+
+	}
+}
+=====================================================================================================================================================================
+Step10:
+Adding assertions
+
+public class ValidateTitle extends Base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver = initializeDriver();
+		driver.get("https://qaclickacademy.com");
+
+		// we can use inheritance or create object of class
+		LandingPage l = new LandingPage(driver);
+		l.clickPopup().click();
+		String t = l.title().getText();
+		Assert.assertEquals(t, "FEATURED COURSES");
+	}
+
+	
+}
+
+In Landingpage added a WebElement
+public WebElement title() {
+		return driver.findElement(title);
+	}
+
+
+public class ValidateNavigationBar extends Base {
+
+	@Test
+	public void basePageNavigation() throws IOException {
+		driver = initializeDriver();
+		driver.get("https://qaclickacademy.com");
+
+		// we can use inheritance or create object of class
+		LandingPage l = new LandingPage(driver);
+		l.clickPopup().click();
+		Assert.assertTrue(l.contact().isDisplayed());
+		
+		//Assert.assertFalse();
+	}
+
+}
+
+in pageObject class
+By contact = By.xpath("//a[text()='Contact']");
+	public WebElement contact() {
+		return driver.findElement(contact);
+	}
+=====================================================================================================================================================================
+Step11:
+What ever is common to all pages , we must place in data.properties file
+url is needed by all testcases, 
+
+now we can access url in all testcases using driver.get(prop.getProperty("url"));
+as we have used Properties class in Base class 
+
+
+=====================================================================================================================================================================
+Step12:
+Converting Framework into testng and configuring testNG xml file
+
+Right click pn project - TestNG - Convert to TestNG - Finish
+testng.xml is created
+
+Run as testng suite
+
+instead of calling initializeDriver() method in all @Test methods
+use this in Base class
+	@BeforeMethod
+	public void setup() throws IOException {
+		driver = initializeDriver();
+		driver.get(prop.getProperty("url"));
+	}
+	
+	@AfterMethod
+	public void teardown() {
+		driver.close();
+	}
+
+=====================================================================================================================================================================
+Step13:
+Integrating testng.xml with pom.xml 
+
+we have testng.xml file we need to pass this to pom.xml file
+search testng maven integration
+open maven surefire plugin
+
+go to this site
+https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html
+scroll till : Using Suite XML Files
+
+and copy the plugin
+in pom.xml above dependencies - create build tag - plugins tag - now paste the plugin
+
+<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+testng.xml file must be at project level , if its not then pass its path
+
+Now we run mvn test
+maven comes to pom.xml file and checks the plugin with testng.xml file and execute based on it
+
+Now go to command prompt
+project path
+and write
+mvn test
+=====================================================================================================================================================================
+Step14:
+Integrating log4j to Framework
+
+add log4j dependency
+
+		$$$$$$$   1st step 	$$$$$$$$$$$$$
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.17.2</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.17.2</version>
+</dependency>
+
+		$$$$$$$   2nd step 	$$$$$$$$$$$$$
+inside resources package - create log4j2.xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<SizeBasedTriggeringPolicy size="500" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+
+		<Root level="trace">
+			<AppenderRef ref="File" />
+		</Root>
+	</Loggers>
+</Configuration>
+
+		$$$$$$$   3rd step 	$$$$$$$$$$$$$
+in all testcases add this step
+public static Logger log = LogManager.getLogger(base.class.getName());
+and add this import
+import org.apache.logging.log4j.*;
+
+Now we can use log.info/warn/error/debug/..
+
+ 		$$$$$$$   4th step 	$$$$$$$$$$$$$
+we must tell pom.xml file , where is log4j2.xml file is located
+search maven resources filtering
+go to https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html
+copy and paste this in pom.xml file , inside build tag
+<resources>
+			<resource>
+				<directory>src/main/java/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+this is the path for log4j2.xml file - <directory>src/main/resources</directory>
+=====================================================================================================================================================================
+if there is any error ,[WARNING] File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent!
+add this below line in pom.xml file , after version
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+</properties>
+
+now run the testcases thru maven
+open cmd
+go to project path
+mvn clean
+mvn compile
+mvn test
+
+if we get this error 
+[ERROR] Source option 5 is no longer supported. Use 6 or later.
+[ERROR] Target option 1.5 is no longer supported. Use 1.6 or later.
+
+add in pom.xml inside properties
+ <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+
+after running
+go to project-> refresh -> see in logs folder
+=====================================================================================================================================================================
