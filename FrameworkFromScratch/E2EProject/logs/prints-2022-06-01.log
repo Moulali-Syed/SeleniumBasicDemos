@@ -1,9 +1,7 @@
-09:30:43.757 [main] INFO  academy.Base - driver is closed
-09:30:45.340 [main] INFO  academy.Base - driver is initialized
-09:31:43.946 [main] INFO  academy.Base - Navigated to HomePage
-09:31:54.948 [main] INFO  academy.Base - username entered
-09:31:55.131 [main] INFO  academy.Base - password entered
-09:31:55.836 [main] INFO  academy.Base - driver is closed
-09:31:57.397 [main] INFO  academy.Base - driver is initialized
-09:33:09.870 [main] INFO  academy.Base - Navigated to HomePage
-09:33:18.858 [main] INFO  academy.Base - Text validated successfully
+12:00:16.495 [TestNG-tests-1] DEBUG io.netty.util.internal.ThreadLocalRandom - -Dio.netty.initialSeedUniquifier: 0x0eb80dc61463f5fc
+12:00:16.594 [TestNG-tests-1] INFO  academy.Base - driver is initialized
+12:00:16.594 [TestNG-tests-2] INFO  academy.Base - driver is initialized
+12:00:28.451 [TestNG-tests-3] INFO  academy.Base - driver is initialized
+12:00:41.764 [TestNG-tests-3] INFO  academy.Base - Navigated to HomePage
+12:00:43.785 [TestNG-tests-3] INFO  academy.Base - driver is closed
+12:00:44.629 [TestNG-tests-1] INFO  academy.Base - Navigated to HomePage

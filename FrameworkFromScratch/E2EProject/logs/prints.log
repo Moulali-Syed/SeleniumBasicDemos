@@ -1,1 +1,6 @@
-09:33:19.015 [main] INFO  academy.Base - driver is closed
+12:00:45.054 [TestNG-tests-1] INFO  academy.Base - contact button is visible
+12:00:45.223 [TestNG-tests-1] INFO  academy.Base - driver is closed
+12:01:00.663 [TestNG-tests-2] INFO  academy.Base - Navigated to HomePage
+12:01:01.887 [TestNG-tests-2] INFO  academy.Base - username entered
+12:01:02.023 [TestNG-tests-2] INFO  academy.Base - password entered
+12:01:13.143 [TestNG-tests-2] INFO  academy.Base - driver is closed

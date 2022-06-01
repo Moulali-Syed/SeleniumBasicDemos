@@ -1,13 +1,17 @@
 package academy;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -46,17 +50,14 @@ public class Base {
 		return driver;
 	}
 
-	@BeforeMethod
-	public void setup() throws IOException {
-		driver = initializeDriver();
-		log.info("driver is initialized");
-		driver.get(prop.getProperty("url"));
-		log.info("Navigated to HomePage");
+	public String getScreenshot(String testcaseName,WebDriver driver) throws IOException {
+		File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		//we must give the test method name , as screenshot name , for this in listener we have 
+		// result which has access to all the test methods, from there pass it as parameter
+		String destinationFile = System.getProperty("user.dir")+"\\reports\\"+testcaseName+".png";
+		FileUtils.copyFile(src, new File(destinationFile));
+		//we are returning the screenshot file path, so that we can attach in extent reports
+		return destinationFile;
 	}
-
-	@AfterMethod
-	public void teardown() {
-		driver.close();
-		log.info("driver is closed");
-	}
+	
 }

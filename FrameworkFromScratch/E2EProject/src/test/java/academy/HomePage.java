@@ -2,7 +2,9 @@ package academy;
 
 import java.io.IOException;
 import org.apache.logging.log4j.*;
-
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -11,6 +13,7 @@ import pageObjects.LoginPage;
 
 public class HomePage extends Base {
 
+	public WebDriver driver;
 	public static Logger log = LogManager.getLogger(Base.class.getName());
 	@Test(dataProvider = "getData")
 	public void basePageNavigation(String username, String password, String text) throws IOException {
@@ -46,5 +49,19 @@ public class HomePage extends Base {
 
 		return data;
 
+	}
+	
+	@BeforeTest
+	public void setup() throws IOException {
+		driver = initializeDriver();
+		log.info("driver is initialized");
+		driver.get(prop.getProperty("url"));
+		log.info("Navigated to HomePage");
+	}
+
+	@AfterTest
+	public void teardown() {
+		driver.close();
+		log.info("driver is closed");
 	}
 }

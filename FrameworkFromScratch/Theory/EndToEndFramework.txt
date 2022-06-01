@@ -394,9 +394,271 @@ if we get this error
 [ERROR] Target option 1.5 is no longer supported. Use 1.6 or later.
 
 add in pom.xml inside properties
- <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+ <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
 
 after running
 go to project-> refresh -> see in logs folder
 =====================================================================================================================================================================
+Step15:
+To make our testcases to run in parallel
+with the script we written if we run in parallel , the driver returned from initializeDriver method will be overridden by all classes
+To overcome this initalize public WebDriver driver ; in all test classes , thus the driver from initializeDriver method will
+point to the local driver in test case class , thus over come overriding , in turn helps in parallel execution
+
+=====================================================================================================================================================================
+Step16:
+to run test in parallel provide - parallel="tests" in suite tag
+
+to run classes in parallel provide - parallel="classes" in test tag
+=====================================================================================================================================================================
+
+Step17:
+ScreenShot on test failure
+we can get using TestNG Listeners
+inside src/test/java - academy package create a class as ListenerImplementation.java
+
+and implement ITestListener - then override methods
+
+now we want to take screenshot on test failure , we have to do this in onTestFailure method
+add the commons io dependency in pom.xml
+<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+go to Base class , add the screenshot code
+
+public void getScreenshot(String testcaseName,WebDriver driver) throws IOException {
+		File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		//we must give the test method name , as screenshot name , for this in listener we have 
+		// result which has access to all the test methods, from there pass it as parameter
+		String destinationFile = System.getProperty("user.dir")+"\\reports\\"+testcaseName+".png";
+		FileUtils.copyFile(src, new File(destinationFile));
+	}
+
+in Listeners class
+@Override
+	public void onTestFailure(ITestResult result) {
+		//to get the failed test method name
+		String testMethodName = result.getMethod().getMethodName();
+		
+		//to get the driver instance of failed method
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver").get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			getScreenshot(testMethodName,driver);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+in testng.xml file add below
+<listeners>
+		<listener class-name="academy.ListenerImplementation"></listener>
+	</listeners>
+
+class-name="pathOfFile" here class-name="packagename.className"
+
+=====================================================================================================================================================================
+modified testng.xml file , and added @BeforeTest , @AfterTest instead of @BeforeMethod ,@AfterMethod and added public WebDriver driver; in all test methods
+
+
+=====================================================================================================================================================================
+Step18:
+ExtentReport generation
+inside resource pacakge - create a class ExtentReportsNG
+
+Step1:
+add dependency in pom.xml
+<dependency>
+    <groupId>com.aventstack</groupId>
+    <artifactId>extentreports</artifactId>
+    <version>5.0.9</version>
+</dependency>
+
+Step2:
+inside resource pacakge - create a class ExtentReportsNG
+public class ExtentReportsNG {
+	static ExtentReports extent;
+
+	
+	public static ExtentReports getReportObject() {
+
+		// get the project path dynamically using
+		String path = System.getProperty("user.dir") + "\\reports\\index.html";
+		// ExtentSparkReporter is responsible for creating html file and put some
+		// configuration inside it
+		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
+		reporter.config().setReportName("Web Automation Results");
+		reporter.config().setDocumentTitle("Test Results");
+
+		// ExtentReports responsible for all the execution
+		extent = new ExtentReports();
+		extent.attachReporter(reporter);// pass ExtentSparkReporter object
+		extent.setSystemInfo("Tester", "Moulali");
+		
+		return extent;
+	}
+}
+
+Step3:
+go to the listeners class , we need reports for all tests , in Listeners class we have onTestStart method
+
+ExtentTest test;
+	ExtentReports extent = ExtentReportsNG.getReportObject();
+
+	@Override
+	public void onTestStart(ITestResult result) {
+		test = extent.createTest(result.getMethod().getMethodName());
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		test.log(Status.PASS, "Test Passed");
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+
+		// to log failed method
+		test.fail(result.getThrowable());
+		// to get the failed test method name
+		String testMethodName = result.getMethod().getMethodName();
+
+		// to get the driver instance of failed method
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			getScreenshot(testMethodName, driver);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+@Override
+	public void onFinish(ITestContext context) {
+		extent.flush();
+	}
+
+=====================================================================================================================================================================
+Step19:
+How to make framework thread safe , for parallel execution
+
+we have ThreadLocal class , create an object of it and pass the class whichever u want thread safe
+
+1.inside listeners class - 	ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+
+and make changes in listeners class methods
+@Override
+	public void onTestStart(ITestResult result) {
+		test = extent.createTest(result.getMethod().getMethodName());
+		extentTest.set(test);    //----------------------------------------------------------------(1)
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		extentTest.get().log(Status.PASS, "Test Passed"); //----------------------------------------(2)
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+
+		// to log failed method
+		extentTest.get().fail(result.getThrowable()); //-------------------------------------------(3)
+		// to get the failed test method name
+		String testMethodName = result.getMethod().getMethodName();
+
+		// to get the driver instance of failed method
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			getScreenshot(testMethodName, driver);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+=====================================================================================================================================================================
+Step20:
+Attach screenshot on failure
+
+in Base class
+public String getScreenshot(String testcaseName,WebDriver driver) throws IOException {
+		File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		//we must give the test method name , as screenshot name , for this in listener we have 
+		// result which has access to all the test methods, from there pass it as parameter
+		String destinationFile = System.getProperty("user.dir")+"\\reports\\"+testcaseName+".png";
+		FileUtils.copyFile(src, new File(destinationFile));
+		//we are returning the screenshot file path, so that we can attach in extent reports
+		return destinationFile;
+	}
+
+make the screenshot method return the file path of screenshot
+
+in ListernersClass
+
+@Override
+	public void onTestFailure(ITestResult result) {
+
+		// to log failed method
+		extentTest.get().fail(result.getThrowable());
+		WebDriver driver = null;
+		// to get the failed test method name
+		String testMethodName = result.getMethod().getMethodName();
+
+		// to get the driver instance of failed method
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			extentTest.get().addScreenCaptureFromPath(getScreenshot(testMethodName, driver),
+					result.getMethod().getMethodName()); //------------------------------------------this helps in showing screenshot in extent reports
+			getScreenshot(testMethodName, driver);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+we can now run testcases in parallel
+run , refresh project , check the reports folder , index.html file open it in browser , now we can see screenshots along with failed testcases
+
+=====================================================================================================================================================================
+
+optimizing page objects feature
+instead of creating object for every page
+
+which ever element is redirecting to the new page , return next page object
+=====================================================================================================================================================================
+jenkins Integration:
+go to jenkins path in cmd
+java -jar jenkins.war --httpPort=8080
+
+now open in localhost:8080
+
+create new item--> free style project --> 
+general - advanced - use custom workspaces - provide project path
+
+Build Tab
+provide maven commands - test
+
+save
+
