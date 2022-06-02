@@ -1,0 +1,488 @@
+Cucumber Framework:
+Understand importance of behaviour driven development
+cucumber framework architecture and its core functionalities
+selenium integration with cucumber - E2E
+
+
+========================================================================================================================================================
+Template in writing Business requirements:
+Testcases specifications in Behaviour driven developement
+BDD is popular in agile environment
+
+In traditional development , directly u will be given requirements developer will develop based on his understanding, tester will test based on his 
+understanding , BA will create requirements he has his own terminology all this may lead to misunderstanding and mismatch in the product
+due to communication gap between the testers , developers and BA , to bring all them under one common light we have introduced a language ubiquitious language
+Step1:
+Testcases should be defined in a business level by following a ubiquitous langauge
+it is a semi formal language that is shared by all members of a software development team - both software devs and non tech persons can understand
+
+========================================================================================================================================================
+QA role in BDD:
+Syntax:
+In order to (Achieve something) -> Business outcome
+As a (Role)
+I want to Do this
+
+example
+in order to add friend
+I must be a having account
+I want to add friend
+
+In order to Pay credit card payment
+As a netbanking sole owner who have credit section access
+I want to navigate to credit card section , enter amount and process my payment
+========================================================================================================================================================
+Step2:
+Its time to decide what testcases are sufficient to certify business scenario wroking
+
+Syntax for writing testcases:
+Given  (what you need to have to perform action) - Prequisits
+When  (perform action) - Action
+Then  (the desired outcome for the user) - Validation
+
+Example:
+Given: An account with zero balance
+When: I navigate to credit card payment section and click on submit by giving amount
+Then : It should throw error message -- no funds
+
+Given: An account with sufficient  balance who doesnot have credit card
+When: I navigate to credit card payment section 
+Then : You dont have access - error message
+
+
+========================================================================================================================================================
+Advantages:
+this can be used as standard template where all QA can stick to one common standards of defining testcases
+
+Each scenario reflects a business value
+
+We can estimate test coverage happened for each business outcome by going through test scenarios
+
+we can tag these annotations to selenium automation and execute the business testcases
+
+Common standardised testcase template for both manual and automation testing
+========================================================================================================================================================
+Cucumber project Template:
+
+step1:
+download cucumber plugin
+go to eclispe market place
+search cucumber
+install cucumber eclispe plugin
+and restart
+
+Then install Natural plugin
+Natural is a set of plugins providing a smooth experience in editing and maintaining BDD/ATDD files. 
+This helps in highlighting keywords in .feature file
+go to help -install new software - click Add . provide name:Natural , Location: http://rlogiacco.github.io/Natural
+and install natural plugin
+
+Step2:
+Cucumber needs a standard project template
+so we can create maven project - cucumber supports maven-archetype-quickstart
+and create project
+
+========================================================================================================================================================
+Understanding cucumber dependencies:
+Step3:
+cucumber-java and cucumber-junit are required dependencies
+<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>7.3.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>7.3.4</version>
+			
+		</dependency>
+
+
+========================================================================================================================================================
+Understanding cucumber framework terminologies:
+
+Feature File: all features we need to test will go to feature file
+StepDefinition: code to automate the feature
+TestRunner : provide location of feature file and the step definition file , then it will find and run the code
+
+Step4:
+inside src/test/java - create a package features
+inside features package - create a file Login.feature
+
+Feature: Application Login
+
+  Scenario: Home page default login
+    Given User is on landing page
+    When User login into application with username and password
+    Then HomePage is populated
+    And Cards are displayed
+
+========================================================================================================================================================
+Step5:
+Create StepDefinition file
+create a package inside src/test/java - stepDefinition
+Create a class stepDefinition.java inside the package
+
+Convert project to Cucumber
+
+inside the StepDefinition class 
+we can define methods with same name as the ones in given when then and write the corresponding code
+
+once step definition for each step in .feature file is defined we can see in feature file as Glued with methodName
+
+package stepDefinition;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class StepDefinition {
+
+	@Given("^User is on landing page$")
+	public void user_is_on_landing_page() {
+		// code to user navigate to landing page
+	}
+
+	@When("^User login into application with username and password$")
+	public void user_Login_into_application_with_username_and_password() {
+		// code to login
+	}
+
+	@Then("^HomePage is populated$")
+	public void homePage_is_populated() {
+		// code to validate homepage
+	}
+
+	@And("^Cards are displayed$")
+	public void cards_are_displayed() {
+		// code for card displayed verification
+	}
+}
+
+
+
+========================================================================================================================================================
+Step6:
+TidyGherkin plugin to generate step definitions
+tidygherkin install it , it will be in chrome apps
+
+pass the entire feature file and u will get the step definition file
+now paste the feature file
+see the langauge in which u need stepDefinition copy it and paste in stepDefinition java file
+
+import cucumber.api.PendingException;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.And;
+import cucumber.api.junit.Cucumber;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+public class MyStepDefinitions {
+
+    @Given("^User is on landing page$")
+    public void user_is_on_landing_page() throws Throwable {
+        throw new PendingException();
+    }
+
+    @When("^User login into application with username and password$")
+    public void user_login_into_application_with_username_and_password() throws Throwable {
+        throw new PendingException();
+    }
+
+    @Then("^HomePage is populated$")
+    public void homepage_is_populated() throws Throwable {
+        throw new PendingException();
+    }
+
+    @And("^Cards are displayed$")
+    public void cards_are_displayed() throws Throwable {
+        throw new PendingException();
+    }
+
+}
+
+ctrl+click on feature file steps will take to corresponding stepDefinition method
+========================================================================================================================================================
+Step7:
+Create a package testRunner inside src/test/java
+ create a class TestRunner
+inside this we give information about - feature file and stepdefinition file
+
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "src/test/java/features", glue = "stepDefinition")
+public class TestRunner {
+
+}
+
+features = "src/test/java/features"  ---> give the package location where feature files are present
+features package and stepDefinition package must have same parent folder
+glue = "stepDefinition"    ---> give stepDifinition package name
+
+
+rightclick in TestRunner class --> run as junit test
+
+========================================================================================================================================================
+Step8:
+to generate stepdefinition file instead of tidyGherkin plugin we can directly get from the testRunner file , run as junit we can get
+auto generated step definition
+
+
+
+========================================================================================================================================================
+step9:
+importance of regular expressions in feature file
+
+Feature: Application Login
+
+  Scenario: Home page default login
+    Given User is on landing page of app
+    When User login into application with "jin" and password "1234"
+    Then HomePage is populated successfully
+    And Cards are displayed as they should
+
+  Scenario: Home page default login
+    Given User is on landing page of app
+    When User login into application with "john" and password "4738"
+    Then HomePage is populated successfully
+    And Cards are displayed as they should
+
+when we have to login 2 sets of user ids , instead of defining seperate step definition for each scenario we can use regular expression
+
+package stepDefinition;
+
+import org.junit.runner.RunWith;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+
+@RunWith(Cucumber.class)
+public class MultipleLoginStepDef {
+
+	@Given("^User is on landing page of app$")
+	public void user_is_on_landing_page_of_app() {
+		
+	}
+
+	@When("^User login into application with \"([^\"]*)\" and password \"([^\"]*)\"$")
+	public void user_login_into_application_with_something_and_password_something(String strArg1, String strArg2)
+			throws Throwable {
+
+	}
+
+	@Then("^HomePage is populated successfully$")
+	public void home_page_is_populated_successfully() {
+		
+	}
+
+	@And("^Cards are displayed as they should$")
+	public void cards_are_displayed_as_they_should() {
+		
+	}
+}
+
+
+========================================================================================================================================================
+Step10:
+
+@When("^User login into application with \"([^\"]*)\" and password \"([^\"]*)\"$")
+	public void user_login_into_application_with_something_and_password_something(String strArg1, String strArg2)
+			throws Throwable {
+
+	}
+
+we can see that it accepts 2 parameters
+
+@RunWith(Cucumber.class)
+public class MultipleLoginStepDef {
+
+	@Given("^User is on landing page of app$")
+	public void user_is_on_landing_page_of_app() {
+		// Write code here that turns the phrase above into concrete actions
+		System.out.println("landingPage");
+	}
+
+	@When("^User login into application with \"([^\"]*)\" and password \"([^\"]*)\"$")
+	public void user_login_into_application_with_something_and_password_something(String strArg1, String strArg2)
+			throws Throwable {
+		System.out.println(strArg1);
+		System.out.println(strArg2);
+	}
+
+	@Then("^HomePage is populated successfully$")
+	public void home_page_is_populated_successfully() {
+		// Write code here that turns the phrase above into concrete actions
+		System.out.println("On HomePage");
+	}
+
+	@And("^Cards are displayed as they should$")
+	public void cards_are_displayed_as_they_should() {
+		// Write code here that turns the phrase above into concrete actions
+		System.out.println("Cards Displayed");
+	}
+}
+
+
+========================================================================================================================================================
+make testng framework , compatiable with cucumber framework
+in our E2E project 
+
+inside src/test/java - create a package : features
+create a file - Login.feature
+
+inside src/test/java - create a package : stepDefinitions  - create a class
+
+inside src/test/java - create package : cucumberOptions - create class TestRunner
+
+========================================================================================================================================================
+now write feature file
+login.feature
+
+Feature: Login into Application
+
+Scenario: Positive test validating login
+Given Initialize the browser with chrome
+And Navigate to "QAClickAcademy" site
+And Click on login link in homepage to land on Secure sign in Page
+When User enters "username" and "password" and logs in
+Then Verify that user is successfully logged in
+
+
+goto TestRunner.java
+first add cucumber-java and cucumber-junit dependencies into pom.xml
+right click on project and update project
+
+
+stepDefinition file
+provide stepDefinitions
+now whatever data we were reading from .properties file or from the dataProvider , now we can provide that in .feature file
+and our methods in stepDefinition will accept that as a parameter
+========================================================================================================================================================
+
+Add page objects and handle dynamic popups in homepage
+
+========================================================================================================================================================
+Parameterizing selenium tests with cucumber:
+
+we have to use Scenario Outline instead of Scenario
+
+Feature: Login into Application
+
+Scenario Outline: Positive test validating login
+Given Initialize the browser with chrome
+And Navigate to "QAClickAcademy" site
+And Click on login link in homepage to land on Secure sign in Page
+When User enters <username> and <password> and logs in
+Then Verify that user is successfully logged in
+
+Examples:
+|username 	      |password |
+|test99@gmail.com |123456   |
+|test123@gmail.com|38488    |
+
+
+1.Scenario Outline
+2.<parametername> 
+3.Examples
+4.stepDeinitionFile change the method definition
+	use --> (.+) this represent the parameter regular expression
+========================================================================================================================================================
+Integrate cucumber with testng and maven:
+
+create a testng.xml file
+
+<classes>
+<class name="cucumberOptions.TestRunner"/>
+</classes>
+
+
+name="cucumberOptions.TestRunner"  -  packageNameWhereTestRunnerIsPresent.TestRunnerClassname
+
+
+now convert TestRunner class
+in pom.xml add dependency
+<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-testng -->
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-testng</artifactId>
+    <version>7.3.4</version>
+</dependency>
+
+
+@CucumberOptions(features = "src/test/java/features", glue = "stepDefinition")
+public class TestRunner extends AbstractTestNGCucumberTests{
+
+}
+
+we can add in pom.xml file, maven surefire plugin we can now provide the new testng.xml file with cucumber testcases
+
+<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+
+
+========================================================================================================================================================
+sample .feature file
+
+#Author: your.email@your.domain.com
+#Keywords Summary :
+#Feature: List of scenarios.
+#Scenario: Business rule through list of steps with arguments.
+#Given: Some precondition step
+#When: Some key actions
+#Then: To observe outcomes or validation
+#And,But: To enumerate more Given,When,Then steps
+#Scenario Outline: List of steps for data-driven as an Examples and <placeholder>
+#Examples: Container for s table
+#Background: List of steps run before each of the scenarios
+#""" (Doc Strings)
+#| (Data Tables)
+#@ (Tags/Labels):To group Scenarios
+#<> (placeholder)
+#""
+## (Comments)
+#Sample Feature Definition Template
+@tag
+Feature: Title of your feature
+  I want to use this template for my feature file
+
+  @tag1
+  Scenario: Title of your scenario
+    Given I want to write a step with precondition
+    And some other precondition
+    When I complete action
+    And some other action
+    And yet another action
+    Then I validate the outcomes
+    And check more outcomes
+
+  @tag2
+  Scenario Outline: Title of your scenario outline
+    Given I want to write a step with <name>
+    When I check for the <value> in step
+    Then I verify the <status> in step
+
+    Examples: 
+      | name  | value | status  |
+      | name1 |     5 | success |
+      | name2 |     7 | Fail    |
+
+
+
+
+========================================================================================================================================================

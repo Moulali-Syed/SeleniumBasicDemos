@@ -34,10 +34,14 @@ public class Base {
 		// mvn test -Dbrowser=chrome from this command browsername will be extracted
 		String browserName = System.getProperty("browser");
 		
-		if (browserName.equalsIgnoreCase("chrome")) {
+		if (browserName.contains("chrome")) {
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
-			options.addArguments("headless");
+			if (browserName.contains("headless")){
+				
+				options.addArguments("headless");
+			}
+			
 			driver = new ChromeDriver(options);
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 			WebDriverManager.firefoxdriver().setup();
