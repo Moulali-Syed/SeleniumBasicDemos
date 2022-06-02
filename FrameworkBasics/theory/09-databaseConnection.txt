@@ -1,0 +1,33 @@
+JDBC:
+Download mysql 
+
+connect to mysql
+
+
+creating database in mysql server:
+query:
+create database dataBaseName;
+ex: create database QADBT;
+
+#point to database
+use QADBT;
+
+#create table
+create table EmployeeInfo(name varchar2(20),id int,location varchar2(20) , age int);
+
+# check tableSchema
+describe EmployeeInfo
+
+#inserting records into table
+insert into EmployeeInfo values('sam' , 1, 'newJersey',21);
+insert into EmployeeInfo values('ram' , 2, 'newyork',19);
+insert into EmployeeInfo values('tam' , 3, 'newJersey',21);
+
+Integration of Database with JDBC API:
+we need a  jar , to connect selenium code to database
+https://mvnrepository.com/artifact/mysql/mysql-connector-java
+<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.29</version>
+		</dependency>
