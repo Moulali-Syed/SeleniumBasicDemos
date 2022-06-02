@@ -1,0 +1,7 @@
+06:05:56.212 [TestNG-tests-2] DEBUG io.netty.util.internal.ThreadLocalRandom - -Dio.netty.initialSeedUniquifier: 0xe619c23584888331
+06:05:56.333 [TestNG-tests-3] INFO  academy.Base - driver is initialized
+06:05:56.339 [TestNG-tests-2] INFO  academy.Base - driver is initialized
+06:05:56.342 [TestNG-tests-1] INFO  academy.Base - driver is initialized
+06:06:20.037 [TestNG-tests-2] INFO  academy.Base - Navigated to HomePage
+06:06:22.504 [TestNG-tests-2] INFO  academy.Base - username entered
+06:06:22.770 [TestNG-tests-2] INFO  academy.Base - password entered

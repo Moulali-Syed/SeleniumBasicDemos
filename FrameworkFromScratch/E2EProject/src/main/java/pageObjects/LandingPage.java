@@ -12,13 +12,14 @@ public class LandingPage {
 		this.driver = driver;
 	}
 
-	By signIn = By.cssSelector("a[href*='sign_in']");
+	private By signIn = By.cssSelector("a[href*='sign_in']");
 
-	By popup = By.xpath("//button[text()='NO THANKS']");
+	private By popup = By.xpath("//button[text()='NO THANKS']");
 
-	By title = By.cssSelector(".text-center>h2");
+	private By title = By.cssSelector(".text-center>h2");
 
-	By contact = By.xpath("//a[text()='Contact']");
+	private By contact = By.xpath("//a[text()='Contact']");
+
 	public WebElement getLogin() {
 		return driver.findElement(signIn);
 	}
@@ -30,7 +31,7 @@ public class LandingPage {
 	public WebElement title() {
 		return driver.findElement(title);
 	}
-	
+
 	public WebElement contact() {
 		return driver.findElement(contact);
 	}

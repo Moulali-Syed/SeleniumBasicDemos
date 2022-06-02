@@ -12,11 +12,11 @@ public class LoginPage {
 		this.driver = driver;
 	}
 
-	By email = By.cssSelector("input[id='user_email']");
+	private By email = By.cssSelector("input[id='user_email']");
 
-	By password = By.cssSelector("input#user_password");
+	private By password = By.cssSelector("input#user_password");
 
-	By submit = By.cssSelector("input[type='submit']");
+	private By submit = By.cssSelector("input[type='submit']");
 
 	public WebElement email() {
 		return driver.findElement(email);

@@ -15,17 +15,20 @@ public class HomePage extends Base {
 
 	public WebDriver driver;
 	public static Logger log = LogManager.getLogger(Base.class.getName());
+
 	@Test(dataProvider = "getData")
 	public void basePageNavigation(String username, String password, String text) throws IOException {
-		
 
 		// we can use inheritance or create object of class
 		LandingPage l = new LandingPage(driver);
-		l.clickPopup().click();
+		if (l.clickPopup().isDisplayed()) {
+			l.clickPopup().click();
+		}
+
 		l.getLogin().click();
 
 		LoginPage lp = new LoginPage(driver);
-		
+
 		lp.email().sendKeys(username);
 		log.info("username entered");
 		lp.password().sendKeys(password);
@@ -50,7 +53,7 @@ public class HomePage extends Base {
 		return data;
 
 	}
-	
+
 	@BeforeTest
 	public void setup() throws IOException {
 		driver = initializeDriver();

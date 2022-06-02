@@ -1,0 +1,89 @@
+How to parameterize jenkins build with multi options profile
+to change browser , now we have to change in data.properties file , but for management doesnot know technical stuff
+Instead we can control parameters like browser from Jenkins
+to run testcase we can send parameters from maven commands
+mvn test -Dbrowser=chrome
+-D represents that maven can take parameters ,
+and we have to extract that parameter in Base class using
+String browserName = System.getProperty("browser");
+
+Now we can go to the jenkins job , and make it parameterized
+open the job
+In General tab - checkmark this project is parameterized
+		Choice Parameter
+			Name     browser
+			Choices  chrome
+				   firefox
+				   IE
+				   safari
+
+Now save and click on Build with parameters
+
+Now we have to integrate the selected option in our maven command
+go to jenkins job - Build tab - Invoke top-level maven targets
+test -Dbrowser="$browser"
+
+$ represents jenkins variable
+
+========================================================================================================================================================================
+coding standards to achieve encapsulation in framework:
+private locators and public methods
+
+in page object classes , the locators should be made private , to access it we declare public methods
+private variables and public methods - helps to achieve encapsulation
+hiding data implementation , by restricting access to public methods
+Instance variables are kept private and accessor methods are made public to achieve this
+
+========================================================================================================================================================================
+Remove hard coded paths in framework by generating paths dynamically
+
+System.getProperty("user.dir");   -----> gives the project path
+
+
+========================================================================================================================================================================
+How to execute tests in chrome headless mode:
+
+we will not see browser opening while running the tests using headless mode
+
+go to Base class , we use the ChromeOptions
+
+if (browserName.contains("chrome")) {
+			WebDriverManager.chromedriver().setup();
+			ChromeOptions options = new ChromeOptions();
+			if (browserName.contains("headless")){
+				
+				options.addArguments("headless");
+			}
+			
+			driver = new ChromeDriver(options);
+		}
+
+
+we can add this browser in the jenkins job
+general - project is parameterized - choice parameters --  Name browser , Choices chromeheadless  - save
+
+
+========================================================================================================================================================================
+Inheritance and Interface in framework and can driver be static or non static
+
+we can see in all classess , we are inheriting Base class - as we have to initialize driver
+
+Listeners class we used implements ITestListener
+
+can driver static or not?
+when we declare any variable static , it will not create a new variable, all objects share a common property
+if we run tests in sequential then driver can be static , the same is used by all testcases
+thus no new memory is allocated
+
+but to run in parallel , we cannot make it static , but in our framework if we keep static then also it will work
+because in every test class we created a local - WebDriver driver ; to which actual driver is initialized thus no issue with static or non static driver in our code
+
+if tests running in sequential static is advantageous , less memory on heap space
+if tests running in parallel , we cant use static keyword , we get NUllPointerException
+========================================================================================================================================================================
+Best approach on how to consolidate testcases into different classes:
+
+In test classes also follow page object pattern , if u want to verify something on same page instead of creating a class do it in same class using a new
+@Test method , this way we can reduce unnecssary browser invocation
+
+whichever testcases belong to same page , all those must be used in a same class file
