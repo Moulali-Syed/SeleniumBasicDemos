@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class CollectionDemo5 {
+public class CollectionsDemo5 {
 
 	public static void main(String[] args) {
 		ArrayList al = new ArrayList();

@@ -1,6 +1,6 @@
 package collectionsFreamwork;
 
-public class CollectionDemo2 {
+public class CollectionsDemo2 {
 
 }
 
