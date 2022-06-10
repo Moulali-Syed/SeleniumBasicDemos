@@ -10,5 +10,7 @@ public class AAShortcuts {
  * 
  * ctrl+shift+f = format
  * 
+ * ctrl+shift+o - automatic import statements will be added
+ * 
  * 
  */
