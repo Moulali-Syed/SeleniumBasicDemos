@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>		<!--               Appendertag                  -->
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>			<!-- 				Loggers						-->
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
+
+<!-- 
+	Two main tags in log42.xml is Appenders | Loggers
+
+	Where to Log ? File or Console [Defined in Appender]
+	where to log will be found in appender tag
+	in appenders if we give console - then output will print in console
+	if we give file then output will go to file
+
+	What to log?        [Defined in Loggers]
+	inside Loggers we have Root tag with level as error , then it will log only errors
+	if we want all logs we can set the level as trace
+
+	How to log?
+	inside appenders , console tag we have pattern layout
+
+
+
+-->

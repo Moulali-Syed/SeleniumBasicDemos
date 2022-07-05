@@ -8,7 +8,6 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-
 public class ExtentReportDemo {
 
 	ExtentReports extent;
@@ -32,19 +31,17 @@ public class ExtentReportDemo {
 
 	@Test
 	public void demo() {
-		
-		ExtentTest test =  extent.createTest("demo");
-
+		extent.createTest("demo");
 		WebDriverManager.chromedriver().setup();
 		WebDriver driver = new ChromeDriver();
-
-		driver.get("https://rahulshettyacademy.com");
-
+		driver.get("https://google.com");
 		System.out.println(driver.getTitle());
 		driver.close();
-		
-		
-		test.fail("Result donot match");
 		extent.flush();
 	}
 }
+
+//ExtentTest test =  extent.createTest("demo");
+
+//test.fail("Result donot match");
+//extent.flush();

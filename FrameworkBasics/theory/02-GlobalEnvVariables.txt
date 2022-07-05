@@ -26,4 +26,6 @@ public class GlobalValuesDrive {
 
 
 data.properties file:
+
 browser=chrome
+url=https://demowebsite.com

@@ -396,7 +396,7 @@ if u feel the values which we r sending is common the whole suite , then inside 
 or it is specific to some module we can send it inside test
 
 
-@Parameters({"URL"})
+	@Parameters({"URL"})
 	@Test
 	public void Demo1(String urlName) {
 		System.out.println("Hey There");
@@ -501,7 +501,7 @@ we have ITestListener , which is an interface that has all the methods for the t
 	<listeners>
 		<listener class-name="test.ListenersConfig"></listener>
 	</listeners>
-	<parameter name="URL" value="qaclickacademy.com"></parameter>
+
 	<test name="Personal Loan">
 
 thus whatever we define inside the @Override methods will run based on test success and failure
@@ -531,7 +531,7 @@ at test level
 <test name="" parallel="classes" thread-count="2">
 
 
-after executing test cases we can see the folder test-output , inside it we have index.html file,take the entore path
+after executing test cases we can see the folder test-output , inside it we have index.html file,take the entire path
 and paste it in browser , we can see the testng generated some default report
 
 
