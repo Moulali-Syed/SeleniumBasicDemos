@@ -3,6 +3,7 @@ package java1;
 public class IJVM {
 	
 	/*
+	 * JVM is application based virtual machine
 	 * JVM [.class file comes to JVM]
 	 * 
 	 * 1.class loader 
