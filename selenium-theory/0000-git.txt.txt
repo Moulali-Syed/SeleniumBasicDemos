@@ -489,6 +489,28 @@ class Scooter extends Vehicle{
 		s1.start();
 	}
 }
+
+package java4;
+
+//abstract demo
+public class AbstractDemo extends Test{
+
+	public void sayHi() {
+		System.out.println("Hi");
+	}
+	public static void main(String[] args) {
+		AbstractDemo obj = new AbstractDemo();
+		obj.sayHello();
+		obj.sayHi();
+	}
+}
+
+abstract class Test{
+	abstract void sayHi();
+	public void sayHello() {
+		System.out.println("hello there");
+	}
+}
 _______________________________________________________________________________________________________________________________________________________________________
 Interface in java: used to achieve abstraction
 interface can only contain abstract methods
@@ -538,6 +560,45 @@ class Test implements I1{
 
 
 //we cannot create object for interface
+
+interface Demo
+package oops;
+
+interface InterfaceDemo{
+	public void eat();
+	public void run();
+	default void hey(){
+		System.out.println("hey");
+	}
+	static void display(){
+		System.out.println("look");
+	}
+	int a = 10;
+}
+
+public class Test1 implements InterfaceDemo{
+	public static void main(String[] args){
+		Test1 obj = new Test1();
+		obj.eat();
+		obj.run();
+		System.out.println(InterfaceDemo.a);
+		System.out.println(Test1.a);
+		System.out.println(a);
+		obj.hey();
+		InterfaceDemo.display();
+		//obj.hi();
+	}
+	
+	public void hi(){
+		System.out.println("hi");
+	}
+	public void eat(){
+		System.out.println("Apple");
+	}
+	public void run(){
+		System.out.println("Horse");
+	}
+}
 _______________________________________________________________________________________________________________________________________________________________________Encapsulation: is mechanism of wrapping data(variables) and code acting on the data(methods) together as a single unit
 Data Hiding
 Steps to achieve encapsulation:
@@ -555,6 +616,24 @@ class Employee{
 	}
 }
 
+//encapsulation Demo
+package oops;
+public class EncapsulationDemo{
+	private int num =10;
+	public int getNum(){
+		return this.num;
+	}
+	public void setNum(int num){
+		this.num = num;
+	}
+	
+	public static void main(String[] args){
+		EncapsulationDemo obj = new EncapsulationDemo();
+		obj.setNum(100);
+		System.out.println(obj.getNum());
+	}
+
+}
 _______________________________________________________________________________________________________________________________________________________________________
 this keyword:
 this keyword is a reference variable that refers to the current object
