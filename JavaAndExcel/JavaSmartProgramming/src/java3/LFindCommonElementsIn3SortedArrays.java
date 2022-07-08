@@ -11,7 +11,7 @@ public class LFindCommonElementsIn3SortedArrays {
 		int[] arr3 = {2,8,14,40};
 		
 		int x=0,y=0,z=0;
-		ArrayList al = new ArrayList();
+		ArrayList<Integer> al = new ArrayList();
 		while(x<arr1.length && y<arr2.length && z<arr3.length) {
 			if(arr1[x]==arr2[y] && arr2[y]==arr3[z]) {
 				al.add(arr1[x]);
@@ -21,7 +21,14 @@ public class LFindCommonElementsIn3SortedArrays {
 			}else if(arr1[x]<arr2[y]) {
 				x++;
 			}
-//			}else if(arr2[y]<arr3[])
+			else if(arr2[y]<arr3[z]) {
+				y++;
+			}else {
+				z++;
+			}
+		}
+		for(int num:al) {
+			System.out.print(num+" ");
 		}
 	}
 }
