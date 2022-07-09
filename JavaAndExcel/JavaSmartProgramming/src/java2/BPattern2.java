@@ -1,7 +1,7 @@
 package java2;
 
 /*
- 
+
  		*
  		**
  		***
@@ -9,8 +9,8 @@ package java2;
  		***
  		**
  		*
- 
- 
+
+
  */
 
 public class BPattern2 {
@@ -33,7 +33,7 @@ public class BPattern2 {
 			}
 			System.out.println();
 		}
-		
+
 	}
-	
+
 }

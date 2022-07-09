@@ -9,22 +9,22 @@ public class DThrowKeyword {
 	 * , if not the JVM will sends the exception to default exception handler which
 	 * will prints all the exception details[name,description,stack trace] thus
 	 * result in abnormal termination
-	 * 
+	 *
 	 * to overcome abnormal termination we can use try catch block
 	 */
 
 	/*
 	 * syntax: throw new ExceptionClassName("any message can be passed")
-	 * 
+	 *
 	 * programmer will create exception and pass to JVM
-	 * 
+	 *
 	 * throw is mainly used for user defined exception
-	 * 
+	 *
 	 * its always better to create unchecked Exception
-	 * 
+	 *
 	 */
 	/*
-	 * 
+	 *
 	 * class younger extends RuntimeException{}//unchecked class younger extends
 	 * Exception{}//checked
 	 */

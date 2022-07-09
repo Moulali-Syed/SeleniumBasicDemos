@@ -7,7 +7,7 @@ package java2;
  		   *
  */
 public class EPattern5 {
-	
+
 	public static void main(String[] args) {
 		pattern9();
 	}

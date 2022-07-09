@@ -1,3 +1,4 @@
+/*
 package java4;
 
 public class CFinallyBlockDifferenceBetweenfinalFinallyFinalize {
@@ -29,11 +30,11 @@ public class CFinallyBlockDifferenceBetweenfinalFinallyFinalize {
 			 * Finally may not execute if we use system.exit(0) in try block or if any error
 			 * occured in try due to lack of memory or any error occured in finally and its
 			 * not handled
-			 * 
-			 * 
+			 *
+			 *
 			 */
-		}
-
+//		}
+/*
 		try {
 			// doesnot catch any exception
 
@@ -45,13 +46,13 @@ public class CFinallyBlockDifferenceBetweenfinalFinallyFinalize {
 		/*
 		 * final is a keyword can be used with method,class,variable final variable
 		 * value cant be changed , final method cant be overridden
-		 * 
+		 *
 		 * finally is a block , can be used with try catch
-		 * 
+		 *
 		 * finalize is a method , finalize method is override for an object this method
 		 * is called before object is garbage collected protected void finalize() throws
 		 * Throwable{
-		 * 
+		 *
 		 * }
 		 */
 
@@ -60,7 +61,9 @@ public class CFinallyBlockDifferenceBetweenfinalFinallyFinalize {
 		/*
 		 * try , catch , finally cant exist independently
 		 */
-
+/*
 	}
 
 }
+		
+		*/

@@ -6,7 +6,7 @@ public class UReverseNumber {
 
 	/*
 	 * num % 10 - remainder reverse = reverse*10 + remainder
-	 * 
+	 *
 	 */
 	public static void rev() {
 		Scanner sc = new Scanner(System.in);

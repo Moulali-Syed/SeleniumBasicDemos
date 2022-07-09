@@ -1,19 +1,19 @@
 package java2;
 
 /*
- 
+
  		*     *
  		 *   *
  		   *
  		  *  *
  		 *    *
- 		 
+
  */
 public class GPattern8 {
 	public static void main(String[] args) {
 
 		pattern13();
-		
+
 	}
 
 	private static void pattern13() {
@@ -31,6 +31,6 @@ public class GPattern8 {
 		}
 	}
 
-	
+
 
 }

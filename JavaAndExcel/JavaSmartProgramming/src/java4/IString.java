@@ -7,7 +7,7 @@ public class IString {
 	}
 }
 /*
- 
+
 1.String is a non primitive data type
 	and size is not fixed
 
@@ -18,33 +18,33 @@ public class IString {
 	String s = new String(c);
 
 	We have a interface CharSequence - to represent the sequence of characters
-3.String is a class , it has so many methods 
+3.String is a class , it has so many methods
 	public final class String extends Object implements CharSequence,Serializable,Comparable
 	{
-	
-	
+
+
 	}
 	Object is parent class of all classes in java , so Object is parent class of String
 	and String class implements CharSequence interface ,Serializable , Comparable
-	
+
 	Serializable : interface is used when we need to store a copy of object and send them
 	to another process which runs on same system or over the network
-	
-	Comparable interface is used to order the objects of class. It has only one method 
+
+	Comparable interface is used to order the objects of class. It has only one method
 	CompareTo()
-	
+
 4.String s = new String();
 	this will create immutable object
 	String is an immutable object
-	
+
 	normal declaration
 	String s = "apple";
-	
+
 	What is the difference between String s = new String();  vs String s = "apple";
-	
+
 5.To create String , there are three classes:
 	1.String  2.StringBuffer  3.StringBuilder
-	
+
 	to create string we have 4 ways
 very important question why String class is marked final in java
 */
@@ -74,7 +74,7 @@ this creates 2 objects , one in String constant pool[which is inside heap area] 
 String s2 = "Banana";
 this will create only one object and that will be inside String constant pool
 
-The string objects present in SCP are not applicable for garbage collection because a 
+The string objects present in SCP are not applicable for garbage collection because a
 reference variable internally is maintained in JVM
 
 
@@ -128,7 +128,7 @@ city3 = "Delhi";//creates a object in SCP and starts referring to it
 
 Strings are immutable in java because String objects are cached in String pool
 Since cached String literals are shared between multiple persons there is always
-a risk where one persons action would affect all another persons 
+a risk where one persons action would affect all another persons
 for example, if one person changes city from mohali to delhi , all other persons will also
 get affected
 
@@ -162,7 +162,7 @@ Important features of String class
 7.Memory management: when compiler optimizes our string objects, it seems that if two objects
 	have the same values(a="test" and b="test") and thus we need only one string object
 	(for both a and b , these two will point to same object)
-	
+
 Why string class is final?
 String class has got special features which is not available to other java classes and making
 the string class final prevents subclasses that could break these assumptions
@@ -181,10 +181,10 @@ sb.append("happy");//this is immutablity concept , this creates a new object
 
 Difference between == and .equals() method in java
 
-== operator used for reference comparision(address comparision), means 
+== operator used for reference comparision(address comparision), means
 == operator checks if both objects point to same memory location or not
 
-.equals() method is used for content comparision it means .equals() method is used 
+.equals() method is used for content comparision it means .equals() method is used
 to check object value
 
 String s1 = new String("Apple");//creates 2 objects one in heap , one is SCP

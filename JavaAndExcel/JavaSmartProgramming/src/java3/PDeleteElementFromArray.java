@@ -15,7 +15,7 @@ public class PDeleteElementFromArray {
 				break;
 			}
 		}
-		
+
 		if(count==0) {
 			System.out.println("element not found");
 		}else {
@@ -24,6 +24,6 @@ public class PDeleteElementFromArray {
 		for(int i=0;i<a.length-1;i++) {
 			System.out.print(a[i]+" ");
 		}
-		
+
 	}
 }

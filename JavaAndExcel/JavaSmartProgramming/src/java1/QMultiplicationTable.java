@@ -3,7 +3,7 @@ package java1;
 import java.util.Scanner;
 
 public class QMultiplicationTable {
-	
+
 	public static void multiTable() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter a number");

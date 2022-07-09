@@ -1,7 +1,7 @@
-package java4;
+/*package java4;
 
 public class BMethodsToPrintExceptionInfo {
-	
+
 	//video 109
 	public static void main(String[] args) {
 		// methods to print exception details
@@ -19,15 +19,15 @@ public class BMethodsToPrintExceptionInfo {
 		}
 	}
 
-}
+}*/
 
 /*
  * output
- * 
+ *
  * java.lang.ArithmeticException: / by zero at
  * exceptionHandling.MethodsToPrintException.main(MethodsToPrintException.java:
  * 10) java.lang.ArithmeticException: / by zero java.lang.ArithmeticException: /
  * by zero / by zero
- * 
- * 
+ *
+ *
  */

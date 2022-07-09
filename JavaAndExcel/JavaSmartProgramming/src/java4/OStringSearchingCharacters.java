@@ -16,7 +16,7 @@ public class OStringSearchingCharacters {
  * characters in a string or return -1 ,if character doesnot occur
  */
 		System.out.println(s.lastIndexOf('p'));//2
-		
+
 /*
  * charAt() method returns character at specified index. the index value should lie between
  * 0 and length()-1

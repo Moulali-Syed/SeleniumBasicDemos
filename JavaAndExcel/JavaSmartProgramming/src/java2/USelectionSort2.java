@@ -1,7 +1,7 @@
 package java2;
 
 public class USelectionSort2 {
-	
+
 	public static void main(String[] args) {
 		int[] a = {38,52,9,18,6,62,13};
 		int min;
@@ -11,14 +11,14 @@ public class USelectionSort2 {
 			for(int j=i+1;j<a.length;j++) {
 				if(a[j]<a[min]) {
 					min=j;
-					
+
 				}
 			}
 			temp=a[i];
 			a[i] = a[min];
 			a[min] = temp;
 		}
-		
+
 		for(int i:a) {
 			System.out.print(i+" ");
 		}
@@ -51,11 +51,11 @@ check 6th and next
 
 at last we get
 		6 9 13 18 38 52 62
-		
+
 		The algorithm maintains two sub arrays in a given array
 		The subarray which is already sorted
 		remaining subarray which is unsorted
-		
 
-		
+
+
 */

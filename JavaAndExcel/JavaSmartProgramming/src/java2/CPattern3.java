@@ -1,18 +1,18 @@
 package java2;
 
 /*
- 
+
  		   *
  		  **
  		 ***
  		****
- 		
- 		
+
+
  		****
  		 ***
  		  **
  		   *
- 		   
+
  		   *
  		  **
  		 ***
@@ -22,7 +22,7 @@ package java2;
  		 ***
  		  **
  		   *
- 		 
+
  */
 public class CPattern3 {
 
@@ -30,7 +30,7 @@ public class CPattern3 {
 		pattern4();
 		System.out.println("===================================");
 		pattern5();
-		
+
 		System.out.println("====================================");
 		pattern6();
 	}
@@ -66,7 +66,7 @@ public class CPattern3 {
 			for(int j=1;j<=4-i+1;j++) {
 				System.out.print("*");
 			}
-			
+
 			System.out.println();
 		}
 	}

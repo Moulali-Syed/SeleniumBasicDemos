@@ -6,7 +6,7 @@ public class WPrimeNumber {
 
 	/*
 	 * number divisible by 1 and itself only like 7 - divisible by 1 and 7 only
-	 * 
+	 *
 	 * we have to check whether the number is divisible by 2 to number-1
 	 */
 

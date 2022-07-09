@@ -19,12 +19,12 @@ public class TBubbleSort {
 				break;
 			}
 		}
-		
+
 		for(int i:a) {
 			System.out.print(i+" ");
 		}
 	}
-	
+
 	//if we want to sort string we use compareTo() method
 	//compareTo() method is used for comparing two strings lexicographically
 	//each character of both strings is converted to unicode value for comparison
@@ -40,7 +40,7 @@ in case of alphanumeric values it can be dictionary order
 
 BubbleSort also referred to as sinking sort , is a comparision based algorithm
 comparing each pair of adjacent items and swapping them if they are in wrong order
-the pass through list is repeated until no swaps are needed which indicates that list 
+the pass through list is repeated until no swaps are needed which indicates that list
 is sorted
 
 36 19 29 12 5
@@ -51,21 +51,21 @@ Round -1
 		19 29 36 12 5
 		19 29 12 36 5
 		19 29 12 5  36
-Round -2 
+Round -2
 		19 29 12 5  36
 		19 29 12 5  36
 		19 12 29 5  36
 		19 12 5  29  36
-		
+
 Round -3
 		19 12 5   29  36
 		12 19 5   29  36
 		12 5  19  29  36
-		
+
 Round -4
 		12 5   19  29  36
 		5  12  19  29  36
-		
+
 Number of rounds = total Numbers -1
 here  4 = 5 - 1
 

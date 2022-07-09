@@ -6,7 +6,7 @@ public class KStringClassMethods {
 		String name = "abc";
 		String email = "abc@gmail.com";
 		String password = "abc123";
-		
+
 		//length()
 		/*
 		 * the string length() method counts the number of characters in string and returns
@@ -15,20 +15,20 @@ public class KStringClassMethods {
 		 */
 		System.out.println(name.length());//3 - provides output in integer
 		System.out.println(email.length());
-		
+
 		int i = name.length();
 		if(i==0) {
 			System.out.println("name is empty");
 		}
-		
+
 		// if null is stored in a  string , then length() method on it throws exception
 		String a = null;
 		//System.out.println(a.length());//Exception in thread "main" java.lang.NullPointerException:
-		
+
 		String b;
 		//System.out.println(b);//compile time error , initialize b
-		
-		
+
+
 		/*
 		 * isEmpty()
 		 * method of String class is included in java string since JDK 1.6
@@ -41,8 +41,8 @@ public class KStringClassMethods {
 		if(name.isEmpty()) {
 			System.out.println("name cant be empty");
 		}
-		
-		
+
+
 		/*
 		 * trim() method of String class eliminates only leading and trailing spaces
 		 * The unicode value of space character is '\u0020' the trim() method is java checks
@@ -51,11 +51,11 @@ public class KStringClassMethods {
 		 */
 		String d = name.trim();
 		System.out.println(d);
-		
+
 		String e = " abc   ";
 		System.out.println(e);
 		System.out.println(e.trim());
-		
+
 		if(name.trim().length()==0) {
 			System.out.println("name cant be empty");
 		}

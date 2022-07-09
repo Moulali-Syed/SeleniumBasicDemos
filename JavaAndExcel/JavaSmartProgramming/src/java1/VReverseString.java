@@ -13,11 +13,11 @@ public class VReverseString {
 		System.out.println("Enter a word");
 		String str = sc.next();
 		int len ;
-		
+
 		for(len = str.length()-1;len>=0;len--) {
 			System.out.print(str.charAt(len));
 		}
-		
+
 		System.out.println();
 	}
 }

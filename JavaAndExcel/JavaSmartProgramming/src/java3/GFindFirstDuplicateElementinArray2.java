@@ -8,7 +8,7 @@ public class GFindFirstDuplicateElementinArray2 {
 		int[] a = { 6, 5, 3, 2, 5, 1, 2, 4 };
 
 		int temp = -1;
-		
+
 		HashSet<Integer> hs = new HashSet<>();
 		for(int i=a.length-1;i>=0;i--) {
 			if(hs.contains(a[i])) {

@@ -3,7 +3,7 @@ package javadsa;
 public class CVisualisingAlgo3 {
 
 	public static void main(String[] args) {
-		
+
 		long startTime = System.currentTimeMillis();
 		int x = 9999996;
 		int n = 10000000;
@@ -31,7 +31,7 @@ public class CVisualisingAlgo3 {
 		}else {
 			System.out.println("we are expecting valid value");
 		}
-		
+
 		long endTime = System.currentTimeMillis();
 		System.out.println("Time taken : "+(endTime-startTime)+" ms");
 	}

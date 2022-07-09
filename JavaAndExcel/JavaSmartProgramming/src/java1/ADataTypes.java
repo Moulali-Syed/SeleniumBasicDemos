@@ -2,12 +2,12 @@ package java1;
 
 public class ADataTypes {
 
-	
+
 	//declartion
 	int a =10;
 	char c ='x';
 	boolean b = true;
-	
+
 	//Non primitves
 	//string - collection of charcters
 	//size is not fixed
@@ -59,7 +59,7 @@ Short
 Integer
 Long
 Float
-Double 
+Double
 
 NonPrimitve :  String , Array, Class , Structures etc
 

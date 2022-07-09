@@ -3,7 +3,7 @@ package java4;
 //video 88 to 104
 public class AAOOPS_Concepts{}
 /*
- 
+
 
 
 
@@ -18,7 +18,7 @@ Abstraction
 Polymorphism
 Inheritance
 ______________________________________________________________________________________________________________________________
-Smalltalk is purely object oriented programming 
+Smalltalk is purely object oriented programming
 ______________________________________________________________________________________________________________________________
 
 Class:
@@ -67,7 +67,7 @@ state/attribute: color,breed , age
 behaviour: methods [eat,run]
 
 how to create an object
-we can create using 
+we can create using
 new keyword
 newInstance() method
 clone method
@@ -96,7 +96,7 @@ class Animal {
 		Animal dog = new Animal();
 		dog.eat();
 		dog.run();
-		
+
 		Birds sparrow = new Birds();
 		sparrow.fly();
 	}
@@ -156,7 +156,7 @@ default constrcutor: created by compiler
 NoArgumentConstructor:
 class Test{
 	Test(){
-		
+
 	}
 }
 
@@ -178,8 +178,8 @@ public class Employee {
 		// TODO Auto-generated method stub
 		Employee emp1 = new Employee("apple", 101);
 		Employee emp2 = new Employee("Mango", 102);
-		
-		
+
+
 		Test t = new Test();
 	}
 
@@ -199,7 +199,7 @@ class Animal1{
 	}
 }
 class Dog extends Animal1{
-	public static void main(String[] args) { 
+	public static void main(String[] args) {
 		Dog d1 = new Dog();
 		d1.eat();
 	}
@@ -233,7 +233,7 @@ A-> B -> C
 
 4.Multiple inheritance : not present in java because of ambiguity
 			A    B
-	         \   /		
+	         \   /
                    C
 
 5.Hybrid inheritance : not there in java , diamond problem
@@ -241,7 +241,7 @@ A-> B -> C
 	      /   \
 	     B     C
 	     \     /
-			D	
+			D
 
 java only supports single , multilevel , heirarchical inheritance only
 
@@ -262,7 +262,7 @@ public void show() {
 		 B obj = new B();
 		 obj.show();
 		 obj.hi();
-		 
+
 		 //as we are referncing the class A we cant call methods that are only from class B
 		 A obj1 = new B();
 		 obj1.show();
@@ -283,14 +283,14 @@ class B  extends A{
 	public void hello() {
 		System.out.println("hello");
 	}
-	
+
 }
 
 class C extends B{
 	public void hi() {
 		System.out.println("hi");
 	}
-	
+
 	public static void main(String[] args) {
 		C obj = new C();
 		obj.show();
@@ -312,7 +312,7 @@ code reusablility
 cost cutting
 reduce redunduncy
 
-Inheritance[IS-A] 
+Inheritance[IS-A]
 one class properties inherited into another class
 we achieve this using extends keyword
 
@@ -384,7 +384,7 @@ package oop;
 
 public class Test1 {
 
-	
+
 	public void show() {
 		System.out.println("hellpo");
 	}
@@ -392,9 +392,9 @@ public class Test1 {
 	public void show(int a) {
 		System.out.println("hi"+ a);
 	}
-	
-	
-	
+
+
+
 	public static void main(String[] args) {
 		Test1 obj = new Test1();
 		obj.show();
@@ -412,7 +412,7 @@ method overloading is not possible in java by changing only the return type, bec
 Can we overload main method in java?
 Yes we can overload main method , JVM only looks for the main method that has String arguments
 
-in method overloading we have automatic promotion , that is if the matching method argument is not found then it will change 
+in method overloading we have automatic promotion , that is if the matching method argument is not found then it will change
 to corresponding datatype whichever it can be converted
 
 Object is parent class of all classes in java
@@ -431,11 +431,11 @@ public class X extends Y {
 	public void show() {
 		System.out.println("X");
 	}
-	
+
 	public static void main(String[] args) {
 		X obj = new X();
 		obj.show();//X
-		
+
 		Y obj1 = new Y();
 		obj1.show();//y
 	}
@@ -457,7 +457,7 @@ Abstraction can be achieved in 2 ways : by using abstract method , by using inte
 what is abstract class and abstract methods?
 1.A method without body(no implementation) is known as abstract method
 2.A method must always be declared in an abstract class or we can say that if a class has abstract method , it should be declared abstarct as well
-3.if a regular class extends an abstract class , then the class must have to implement all the abstract methods of the abstract parent class or it has 
+3.if a regular class extends an abstract class , then the class must have to implement all the abstract methods of the abstract parent class or it has
 to be declared abstract as well
 4.abstract methods in abstract classes must be overridden in derived concrete classes otherwise compile-time error will be thrown
 5.abstract classes cannot be instantiated , means we cannot create an object of abstract class
@@ -482,7 +482,7 @@ class Scooter extends Vehicle{
 	void start() {
 		System.out.println("happy");
 	}
-	
+
 	public static void main(String[] args) {
 		Car1 c = new Car1();
 		Scooter s1 = new Scooter();
@@ -589,7 +589,7 @@ public class Test1 implements InterfaceDemo{
 		InterfaceDemo.display();
 		//obj.hi();
 	}
-	
+
 	public void hi(){
 		System.out.println("hi");
 	}
@@ -627,7 +627,7 @@ public class EncapsulationDemo{
 	public void setNum(int num){
 		this.num = num;
 	}
-	
+
 	public static void main(String[] args){
 		EncapsulationDemo obj = new EncapsulationDemo();
 		obj.setNum(100);
@@ -672,4 +672,3 @@ static block : from jdk version 1.6 we must have main method ,so that static met
 
  */
 
-	

@@ -12,7 +12,7 @@ package java2;
  			  *
  			 *
  			*
- 			
+
  			can be derived from
  			*
  			**
@@ -20,11 +20,11 @@ package java2;
  			****
  			*****
  			print spaces other than diagonal
- 			
- 		
+
+
  */
 public class EPattern6 {
-	
+
 	public static void main(String[] args) {
 		pattern10();
 	}
@@ -36,7 +36,7 @@ public class EPattern6 {
 				if(i>j) {
 					System.out.print(" ");
 				}else {
-					
+
 					System.out.print("*");
 				}
 			}

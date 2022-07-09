@@ -12,9 +12,9 @@ Quality Implementation - understandable ,readable ,maintainable code
 Incompetence - it would be impossible to make simplest search engine without knowing
 				tree or hash map
 Choosing right tool - data structure is like choosing right tool for task
-Memory - by proper Ds and Algo we can determine how efficient a program in its 
+Memory - by proper Ds and Algo we can determine how efficient a program in its
 			use of memory
-			
+
 
 Data structure:
 it is a way of organizing data in a computer
@@ -28,11 +28,11 @@ its impossible to find the book
 
 This is the reason ,library books are arranged in some order
 For example : Fiction books are in one place , NonFiction books are in one place
-				even there in shelves books are placed in alphabetical order, in such a 
-				case it will be quite easy to find a book , it doesnot matter library 
+				even there in shelves books are placed in alphabetical order, in such a
+				case it will be quite easy to find a book , it doesnot matter library
 				has huge number of books , if library books are arranged in some order
 				then its not a big deal to find required book
-				
+
 This is the importance of organizing things
 
 Same is followed in books selling shop
@@ -45,8 +45,8 @@ say u want to search some word from dictionary , in dictionary we have lakhs of 
 we want to search apple , we go to a then p
 
 
-Organizing things is quite normal in day to day life , our room in home 
-groceries in kitchen 
+Organizing things is quite normal in day to day life , our room in home
+groceries in kitchen
 
 Data Structure:
 Organizing the data in a computer , so data can be used efficiently

@@ -1,4 +1,4 @@
-package java4;
+/*package java4;
 
 public class HTest1 {
 	public static void main(String[] args) {
@@ -14,8 +14,8 @@ public class HTest1 {
 //		whenever exception occurs , the method in which exception occurs will create an object and that object will store 3 things
 		// 1. exceptionName 2.Description 3.Stack Trace an this will be passed to JVM and if its not handling then it will
 		//pass to default exception handler and program abruptly ends and print the exception
-		//if we dont want our program end abruptly we can use try catch 
-		
+		//if we dont want our program end abruptly we can use try catch
+
 		/*
 		 * try{
 		 *		risky code
@@ -23,16 +23,16 @@ public class HTest1 {
 		 * catch(ExceptionClassName ref.var.name){
 		 * 	handling code
 		 * }
-		 * 
+		 *
 		 * we must have catch after try block
-		 * 
-		 * 
-		 * 
+		 *
+		 *
+		 *
 		 */
-		
-		
-		
-		try {
+
+
+
+/*		try {
 			int x=100,y=0,z;
 			z=x/y;
 			System.out.println(z);
@@ -46,3 +46,4 @@ public class HTest1 {
 	}
 
 }
+*/

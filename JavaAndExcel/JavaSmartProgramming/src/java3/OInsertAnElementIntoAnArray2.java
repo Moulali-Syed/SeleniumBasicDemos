@@ -7,7 +7,7 @@ public class OInsertAnElementIntoAnArray2 {
 
 		int position = 3;
 		int element = 100;
-		
+
 		for(int i=a.length-1;i>position-1;i--) {
 			a[i]=a[i-1];
 		}

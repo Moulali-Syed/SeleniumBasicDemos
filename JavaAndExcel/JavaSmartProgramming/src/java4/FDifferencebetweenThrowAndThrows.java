@@ -5,9 +5,9 @@ public class FDifferencebetweenThrowAndThrows {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 /*
- * 
+ *
  * throw                                            |    		throws
- * 
+ *
  * unchecked exception[user defined ]					 		checked exception [compile time exception]
  * only single exception								  		multiple exceptions can be thrown
  * throw used inside method								 		throws keyword used with method signature

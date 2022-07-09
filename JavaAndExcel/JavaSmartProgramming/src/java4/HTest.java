@@ -1,4 +1,4 @@
-package java4;
+/*package java4;
 
 import java.io.FileInputStream;
 
@@ -21,3 +21,4 @@ public class HTest {
 	}
 
 }
+*/

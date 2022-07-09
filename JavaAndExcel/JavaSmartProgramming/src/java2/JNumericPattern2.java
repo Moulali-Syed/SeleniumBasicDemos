@@ -6,7 +6,7 @@ package java2;
  321
  4321
  54321
- 
+
  */
 public class JNumericPattern2 {
 

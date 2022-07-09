@@ -5,17 +5,17 @@ public class ZArmstrongNumber {
 	/*
 	 * armstrong number
 	 *  1 = 1^1
-	 *  
-	 *  12 = 1^2+2^2 
-	 *  
+	 *
+	 *  12 = 1^2+2^2
+	 *
 	 *  123 = 1^3+2^3+3^3
-	 *  
+	 *
 	 *  0,1 , 153,370, 371,407,1634 are armstrong numbers
-	 *  
+	 *
 	 *  armstrong: find length , then apply reverse a number logic
-	 *  
-	 *  
-	 *  
+	 *
+	 *
+	 *
 	 */
 	public static void main(String[] args) {
 		armstrong();
@@ -30,7 +30,7 @@ public class ZArmstrongNumber {
 			leng = leng+1;
 			t1 = t1/10;
 		}
-		
+
 		int t2 = num;
 		int rem;
 		int arm = 0;
@@ -43,7 +43,7 @@ public class ZArmstrongNumber {
 			arm = arm+mul;
 			t2=t2/10;
 		}
-		
+
 		if(num==arm) {
 			System.out.println("armstrong");
 		}else {

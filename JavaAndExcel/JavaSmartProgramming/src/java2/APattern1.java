@@ -7,8 +7,8 @@ package java2;
  		***
  		****
  		*****
- 		
- 	pattern2	
+
+ 	pattern2
  		*****
  		****
  		***
@@ -17,12 +17,12 @@ package java2;
  */
 public class APattern1 {
 
-	
+
 	public static void main(String[] args) {
-		
+
 		pattern1();
 		pattern2();
-		
+
 	}
 
 	private static void pattern2() {

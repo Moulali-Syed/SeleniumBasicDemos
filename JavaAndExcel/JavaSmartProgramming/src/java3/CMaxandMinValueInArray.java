@@ -6,7 +6,7 @@ public class CMaxandMinValueInArray {
 		int[]  a = {4,3,5,13,2,1,6};
 		int min=a[0];
 		int max = a[a.length-1];
-	
+
 		for(int i=1;i<a.length;i++) {
 			if(a[i]<min) {
 				min = a[i];
@@ -17,6 +17,6 @@ public class CMaxandMinValueInArray {
 		}
 		System.out.println(min);
 		System.out.println(max);
-		
+
 	}
 }
