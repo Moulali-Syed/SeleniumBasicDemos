@@ -29,6 +29,8 @@ package java5;
  * 
  * If multiple threads have same priority , then it depends on JVM which thread to be executed
  * 
+ * priorities depends on platform[windows doesnot support priorities]
+ * 
  */
 public class IThreadPriorities extends Thread {
 
