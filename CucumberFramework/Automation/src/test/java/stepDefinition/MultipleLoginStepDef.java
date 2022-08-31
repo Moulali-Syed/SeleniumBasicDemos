@@ -1,7 +1,10 @@
 package stepDefinition;
 
+import java.util.List;
+
 import org.junit.runner.RunWith;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -18,10 +21,17 @@ public class MultipleLoginStepDef {
 	}
 
 	@When("^User login into application with \"([^\"]*)\" and password \"([^\"]*)\"$")
-	public void user_login_into_application_with_something_and_password_something(String strArg1, String strArg2)
+	public void user_login_into_application_with_userName_and_password(String strArg1, String strArg2)
 			throws Throwable {
 		System.out.println(strArg1);
 		System.out.println(strArg2);
+	}
+	
+	@When("^User signup with below details$")
+	public void user_signup(DataTable data) throws Throwable{
+		List<List<String>> obj = data.asLists();
+		//then use the details
+		obj.get(0);
 	}
 
 	@Then("^HomePage is populated successfully$")
@@ -34,5 +44,25 @@ public class MultipleLoginStepDef {
 	public void cards_are_displayed_as_they_should() {
 		// Write code here that turns the phrase above into concrete actions
 		System.out.println("Cards Displayed");
+	}
+	
+	
+//	Given 
+//	When 
+//	Then 
+	
+	@Given("^validate the browser$")
+	public void validate() {
+		
+	}
+	
+	@When("^Browser is triggered$")
+	public void browser_triggered() {
+		
+	}
+	
+	@Then("^Check if browser is displayed$")
+	public void check_browser_displayed() {
+		
 	}
 }

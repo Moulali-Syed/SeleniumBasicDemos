@@ -34,5 +34,4 @@ public class StepDefinition {
 		// code for card displayed verification
 		System.out.println("Cards displayed");
 	}
-
 }
