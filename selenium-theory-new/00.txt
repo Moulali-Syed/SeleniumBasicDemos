@@ -1,0 +1,8 @@
+History of selenium:
+Selenium was conceived by Thought works Engineer named Jason
+
+Selenium Remote control --> changed to Selenium WebDriver , selenium grid , Selenium IDE
+
+website for practice:
+https://automationtesting.co.uk/
+
